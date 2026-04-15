@@ -87,6 +87,10 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
+  // Redirect to dashboard if already logged in
+  fetch('http://localhost:3000/api/auth/me', { credentials: 'include' })
+    .then((res) => { if (res.ok) window.location.href = '/dashboard'; });
+
   const registerForm = document.getElementById('registerForm') as HTMLFormElement;
   const errorMsg = document.getElementById('errorMsg') as HTMLDivElement;
 
