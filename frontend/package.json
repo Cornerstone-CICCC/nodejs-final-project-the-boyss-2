@@ -15,7 +15,11 @@
     "@astrojs/check": "^0.9.8",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.6",
+<<<<<<< HEAD
     "tailwindcss": "^4.2.2",
+=======
+    "nanostores": "^1.2.0",
+>>>>>>> ad053a4f7a9029b7cfb4832917d7b7cb2743f7ea
     "typescript": "^5.9.3"
   }
 }

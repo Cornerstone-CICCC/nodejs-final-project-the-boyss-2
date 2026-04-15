@@ -87,6 +87,10 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
+  import { requireGuest } from '../lib/auth';
+
+  requireGuest();
+
   const registerForm = document.getElementById('registerForm') as HTMLFormElement;
   const errorMsg = document.getElementById('errorMsg') as HTMLDivElement;
 
