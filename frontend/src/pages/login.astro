@@ -62,9 +62,10 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  // Redirect to dashboard if already logged in
-  fetch('http://localhost:3000/api/auth/me', { credentials: 'include' })
-    .then((res) => { if (res.ok) window.location.href = '/dashboard'; });
+  import { requireGuest, setAuth } from '../lib/auth';
+  import type { User } from '../lib/auth';
+
+  requireGuest();
 
   const loginForm = document.getElementById('loginForm') as HTMLFormElement;
   const errorMsg = document.getElementById('errorMsg') as HTMLDivElement;
@@ -87,9 +88,10 @@ import Layout from '../layouts/Layout.astro';
         body: JSON.stringify(data)
       });
 
-      const result: { message?: string } = await res.json();
+      const result: { user?: User; message?: string } = await res.json();
 
-      if (res.ok) {
+      if (res.ok && result.user) {
+        setAuth(result.user);
         window.location.href = '/dashboard';
       } else {
         errorMsg.textContent = result.message || 'Login failed';

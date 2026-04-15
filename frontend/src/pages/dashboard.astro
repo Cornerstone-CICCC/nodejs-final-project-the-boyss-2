@@ -73,37 +73,16 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  async function init(): Promise<void> {
-    try {
-      const res: Response = await fetch('http://localhost:3000/api/auth/me', {
-        credentials: 'include',
-      });
+  import { requireAuth, logout } from '../lib/auth';
 
-      if (!res.ok) {
-        window.location.href = '/login';
-        return;
-      }
+  const user = await requireAuth();
 
-      const { user }: { user: { name: string; username: string; email: string } } = await res.json();
+  const userGreeting = document.getElementById('userGreeting') as HTMLSpanElement;
+  const userName = document.getElementById('userName') as HTMLSpanElement;
 
-      const userGreeting = document.getElementById('userGreeting') as HTMLSpanElement;
-      const userName = document.getElementById('userName') as HTMLSpanElement;
-
-      userGreeting.textContent = user.name.split(' ')[0];
-      userName.textContent = `@${user.username}`;
-    } catch {
-      window.location.href = '/login';
-    }
-  }
+  userGreeting.textContent = user.name.split(' ')[0];
+  userName.textContent = `@${user.username}`;
 
   const logoutBtn = document.getElementById('logoutBtn') as HTMLButtonElement;
-  logoutBtn.addEventListener('click', async () => {
-    await fetch('http://localhost:3000/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
-    window.location.href = '/login';
-  });
-
-  init();
+  logoutBtn.addEventListener('click', () => logout());
 </script>
