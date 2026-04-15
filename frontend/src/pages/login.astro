@@ -62,6 +62,11 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
+  import { requireGuest, setAuth } from '../lib/auth';
+  import type { User } from '../lib/auth';
+
+  requireGuest();
+
   const loginForm = document.getElementById('loginForm') as HTMLFormElement;
   const errorMsg = document.getElementById('errorMsg') as HTMLDivElement;
 
@@ -83,10 +88,11 @@ import Layout from '../layouts/Layout.astro';
         body: JSON.stringify(data)
       });
 
-      const result: { message?: string } = await res.json();
+      const result: { user?: User; message?: string } = await res.json();
 
-      if (res.ok) {
-        window.location.href = '/';
+      if (res.ok && result.user) {
+        setAuth(result.user);
+        window.location.href = '/dashboard';
       } else {
         errorMsg.textContent = result.message || 'Login failed';
         errorMsg.classList.remove('hidden');
