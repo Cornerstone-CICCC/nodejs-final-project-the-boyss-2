@@ -1,0 +1,118 @@
+---
+// newpost_modal.astro
+---
+
+<div class="fixed inset-0 flex items-center justify-center bg-[#0f1419]/60 backdrop-blur-sm p-4">
+  <div class="w-full max-w-xl overflow-hidden rounded-3xl border border-outline-variant/20 border-l-4 border-l-[#1d9bf0] bg-surface-container-high shadow-2xl">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-outline-variant/10 px-6 py-4">
+      <button
+        id="closeModalBtn"
+        class="rounded-full p-2 text-on-surface transition-colors hover:bg-surface-container-highest"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold uppercase tracking-widest text-primary">
+          New Post
+        </span>
+      </div>
+
+      <div class="w-10"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      <div class="flex gap-4">
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTUHe_wXx8HjqipRq0r5_xmX7tlKpFcsCotlvDeKhVTca8lCcC-ZFO-kjIxJqsTcG98Ngzb-5101afvAZwZu44c7sYoqFNibw-ejqd11l0qplRmRvt0z4ySDoJ8geot0OCIgsAyswi77xgu6DvxT-MoUUfsWhVY4Ql1GDdAWiOlwkXf-jaHwv0OtSE7ZSqEgdw89PbCHJ41lrGHI4pwjx6rmvcV3YdY-5uxLdVlEWkDPRWM0pIWXzyMdbiBw3ag3e0ANrTNdVwik"
+          alt="User profile"
+          class="h-12 w-12 rounded-full bg-surface-container-highest"
+        />
+
+        <div class="flex-1 space-y-4">
+          <textarea
+            rows="6"
+            placeholder="What is on your mind?"
+            class="w-full resize-none border-none bg-transparent p-0 text-lg text-on-surface placeholder:text-outline/50 focus:ring-0"
+          ></textarea>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
+            <div class="flex items-center gap-1 text-primary">
+              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
+                <span class="material-symbols-outlined">image</span>
+              </button>
+
+              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
+                <span class="material-symbols-outlined">gif_box</span>
+              </button>
+
+              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
+                <span class="material-symbols-outlined">analytics</span>
+              </button>
+
+              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+              </button>
+
+              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
+                <span class="material-symbols-outlined">schedule</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="relative h-6 w-6">
+                <svg class="h-full w-full -rotate-90">
+                  <circle
+                    class="text-outline-variant/30"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="transparent"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  ></circle>
+
+                  <circle
+                    class="text-primary"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="transparent"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-dasharray="62.8"
+                    stroke-dashoffset="40"
+                  ></circle>
+                </svg>
+              </div>
+
+              <div class="h-8 w-[1px] bg-outline-variant/30"></div>
+
+              <button class="rounded-full bg-gradient-to-r from-primary-container to-primary px-8 py-2.5 text-sm font-bold tracking-wide text-on-primary-container shadow-lg transition-all duration-200 active:scale-95">
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center gap-3 bg-surface-container-low px-6 py-3">
+      <span
+        class="material-symbols-outlined text-primary text-sm"
+        style="font-variation-settings: 'FILL' 1;"
+      >
+        auto_awesome
+      </span>
+
+      <span class="text-xs italic text-outline">
+        DevFeed Tip: Use "#" to connect your post to trending topics.
+      </span>
+    </div>
+  </div>
+</div>
