@@ -1,10 +1,8 @@
 ---
-// Sidebar.astro
 import NewpostModal from "../pages/newpost_modal.astro";
 ---
 
-<aside class="fixed left-0 top-0 flex h-screen w-64 flex-col bg-[#171c21] px-4 py-6">
-  <!-- Brand -->
+<aside class="fixed left-0 top-0 flex h-screen w-64 flex-col bg-[#171c21] px-4 py-6 z-50">
   <div class="mb-8 flex items-center gap-3 px-2">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#1d9bf0] to-[#99cbff]">
       <span class="material-symbols-outlined text-lg text-[#003050]">
@@ -22,7 +20,6 @@ import NewpostModal from "../pages/newpost_modal.astro";
     </div>
   </div>
 
-  <!-- New Post Button -->
   <button
     id="openModalBtn"
     class="mb-8 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#1d9bf0] to-[#99cbff] px-4 py-3 font-semibold text-[#003050] shadow-lg shadow-[#1d9bf0]/10 transition-all duration-200 hover:brightness-110 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#1d9bf0]/20 active:scale-95"
@@ -31,10 +28,9 @@ import NewpostModal from "../pages/newpost_modal.astro";
     <span class="text-sm">New Post</span>
   </button>
 
-  <!-- Navigation -->
   <nav class="mb-8 space-y-1">
     <a
-      href="#"
+      href="/dashboard"
       class="flex items-center gap-3 border-l-4 border-[#99cbff] py-2 pl-4 text-[#99cbff]"
     >
       <span class="material-symbols-outlined">home</span>
@@ -74,75 +70,50 @@ import NewpostModal from "../pages/newpost_modal.astro";
     </a>
   </nav>
 
-  <!-- Top Developers -->
- <div class="flex-grow overflow-y-auto pr-1 no-scrollbar">
+  <div class="flex-grow overflow-y-auto pr-1 no-scrollbar">
     <p class="mb-4 px-5 text-[10px] uppercase tracking-widest text-slate-500">
       Top Developers
     </p>
 
     <div class="space-y-1">
-        <div class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-            
-            <div class="space-y-1">
-                <!-- Igor Vargas -->
-                 <div class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-                    
-                    <div class="flex items-center gap-3">
-                        <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-                            <img
-                            src="/images/igor_profile.jpeg"
-                            alt="Igor Vargas"
-                            class="h-full w-full object-cover"
-                            />
-                        </div>
-                        <span class="truncate text-sm text-slate-300">Igor Vargas</span>
-                    </div>
-                    
-                    <span class="material-symbols-outlined text-xs text-slate-600 opacity-0 transition-opacity group-hover:opacity-100">
-                        more_horiz
-                    </span>
-                </div>
-
-                <!-- Arturo Vazquez -->
-                 <div class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-                    <div class="flex items-center gap-3">
-                        <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-                            <img
-                            src="/images/arturo_profile.jpeg"
-                            alt="Arturo Vazquez"
-                            class="h-full w-full object-cover"
-                            />
-                        </div>
-                        <span class="truncate text-sm text-slate-300">Arturo Vazquez</span>
-                    </div>
-                    
-                    <span class="material-symbols-outlined text-xs text-slate-600 opacity-0 transition-opacity group-hover:opacity-100">
-                        more_horiz
-                    </span>
-                </div>
-
-                <!-- Leonardo Costa -->
-                 <div class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-                    <div class="flex items-center gap-3">
-                        <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-                            <img
-                            src="/images/leo_profile.jpeg"
-                            alt="Leonardo Costa"
-                            class="h-full w-full object-cover"
-                            />
-                        </div>
-                        <span class="truncate text-sm text-slate-300">Leonardo Costa</span>
-                    </div>
-                    
-                    <span class="material-symbols-outlined text-xs text-slate-600 opacity-0 transition-opacity group-hover:opacity-100">
-                        more_horiz
-                    </span>
-                </div>
-            </div>
+      <a href="/profile?user=igor" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
+            <img src="/images/igor_profile.jpeg" alt="Igor Vargas" class="h-full w-full object-cover" />
+          </div>
+          <span class="truncate text-sm text-slate-300 text-style italic">Igor Vargas</span>
         </div>
-    </div>
+        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+          chevron_right
+        </span>
+      </a>
 
-  <!-- Footer -->
+      <a href="/profile?user=arturo" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
+            <img src="/images/arturo_profile.jpeg" alt="Arturo Vazquez" class="h-full w-full object-cover" />
+          </div>
+          <span class="truncate text-sm text-slate-300 text-style italic">Arturo Vazquez</span>
+        </div>
+        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+          chevron_right
+        </span>
+      </a>
+
+      <a href="/profile?user=leo" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
+            <img src="/images/leo_profile.jpeg" alt="Leonardo Costa" class="h-full w-full object-cover" />
+          </div>
+          <span class="truncate text-sm text-slate-300 text-style italic">Leonardo Costa</span>
+        </div>
+        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+          chevron_right
+        </span>
+      </a>
+    </div>
+  </div>
+
   <div class="mt-auto space-y-4 pt-6">
     <div class="space-y-1">
       <a
@@ -185,9 +156,7 @@ import NewpostModal from "../pages/newpost_modal.astro";
   </div>
 </aside>
 
-<!-- Open and Close Modal -->
- 
-<div id="modalOverlay" class="hidden fixed inset-0 z-50">
+<div id="modalOverlay" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
   <NewpostModal />
 </div>
 
@@ -199,17 +168,17 @@ import NewpostModal from "../pages/newpost_modal.astro";
     modal?.classList.remove('hidden');
   });
 
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+
+  // Close Modal:
   document.addEventListener('click', (e) => {
-    const target = e.target;
-
-    if (target instanceof HTMLElement) {
-      if (target.id === 'modalOverlay') {
-        modal?.classList.add('hidden');
-      }
-
-      if (target.closest('#closeModalBtn')) {
-        modal?.classList.add('hidden');
-      }
+    const target = e.target as HTMLElement;
+    if (target.closest('#closeModalBtn')) {
+      modal?.classList.add('hidden');
     }
   });
 </script>
@@ -218,7 +187,6 @@ import NewpostModal from "../pages/newpost_modal.astro";
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-
   .no-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
