@@ -17,4 +17,61 @@ model User {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  tweets    Tweet[]
+  likes     Like[]
+  retweets  Retweet[]
+  followers Follow[] @relation("Following")
+  following Follow[] @relation("Followers")
+}
+
+model Tweet {
+  id        Int      @id @default(autoincrement())
+  content   String
+  authorId  Int
+  parentId  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent   Tweet?    @relation("TweetReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Tweet[]   @relation("TweetReplies")
+  likes    Like[]
+  retweets Retweet[]
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tweetId   Int
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tweetId])
+}
+
+model Retweet {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tweetId   Int
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tweetId])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
 }
