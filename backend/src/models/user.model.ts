@@ -37,4 +37,17 @@ const findUserById = async (id: number): Promise<User | null> => {
   });
 };
 
-export { createUser, findUserByEmail, findUserByUsername, findUserById };
+const searchUsers = async (query: string, limit: number = 10) => {
+  return prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { contains: query, mode: "insensitive" } },
+        { name: { contains: query, mode: "insensitive" } },
+      ],
+    },
+    select: { id: true, username: true, name: true },
+    take: limit,
+  });
+};
+
+export { createUser, findUserByEmail, findUserByUsername, findUserById, searchUsers };
