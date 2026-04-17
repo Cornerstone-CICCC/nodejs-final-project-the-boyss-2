@@ -1,0 +1,75 @@
+---
+// RightSidebar Component - Statistics and additional info sidebar
+interface SidebarItem {
+  label: string;
+  value: string | number;
+  change?: string;
+}
+
+interface Props {
+  title?: string;
+  items?: SidebarItem[];
+}
+
+const defaultItems = [
+  { label: "Cognitive Load", value: "2.4 / 10", change: "Down 12% from peak" },
+  { label: "Active Users", value: "1,247", change: "↑ 23% today" },
+  { label: "Top Topics", value: "AI & Design", change: "Trending" }
+];
+
+const { title = "Cognitive Load Index", items = defaultItems } = Astro.props;
+---
+
+<aside class="hidden lg:block fixed right-0 top-0 w-80 h-screen bg-[#0f1419]/50 border-l border-slate-700 p-6 overflow-y-auto">
+  {/* Header */}
+  <div class="flex items-center gap-3 mb-6">
+    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1d9bf0]/20">
+      <span class="material-symbols-outlined text-[#1d9bf0]">
+        analytics
+      </span>
+    </div>
+    <h2 class="text-sm font-bold text-white">{title}</h2>
+  </div>
+
+  {/* Stats Items */}
+  <div class="space-y-6">
+    {items.map((item, index) => (
+      <div class="rounded-lg bg-[#171c21] p-4 border border-slate-700 hover:border-[#1d9bf0]/50 transition-colors">
+        <p class="text-xs text-slate-500 uppercase tracking-widest mb-2">
+          {item.label}
+        </p>
+        <p class="text-2xl font-bold text-white mb-1">
+          {item.value}
+        </p>
+        {item.change && (
+          <p class="text-xs text-slate-400">
+            {item.change}
+          </p>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* Footer Info */}
+  <div class="mt-8 pt-6 border-t border-slate-700">
+    <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+      Dialogue is curated and enhanced by Kinetic AI
+    </p>
+    <div class="flex gap-2">
+      <button class="flex-1 px-3 py-2 rounded-lg bg-[#1d9bf0]/10 text-xs font-medium text-[#1d9bf0] hover:bg-[#1d9bf0]/20 border border-[#1d9bf0]/30 transition-all">
+        Learn More
+      </button>
+      <button class="flex-1 px-3 py-2 rounded-lg bg-slate-800 text-xs font-medium text-slate-300 hover:bg-slate-700 border border-slate-700 transition-all">
+        Settings
+      </button>
+    </div>
+  </div>
+</aside>
+
+<style>
+  @media (max-width: 1024px) {
+    aside {
+      display: none !important;
+    }
+  }
+</style>

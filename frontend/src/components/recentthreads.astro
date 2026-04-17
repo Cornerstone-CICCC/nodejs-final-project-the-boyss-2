@@ -1,0 +1,53 @@
+---
+// RecentThreads Component - Section showing recent discussions
+interface ThreadItem {
+  title: string;
+  link: string;
+  category?: string;
+}
+
+interface Props {
+  threads?: ThreadItem[];
+  title?: string;
+}
+
+const defaultThreads = [
+  { title: "Synthesizing Neo-Tokyo", link: "/thread/1", category: "Architecture" },
+  { title: "Architecture in the Abyss", link: "/thread/2", category: "Design" },
+  { title: "AI Philosophy 101", link: "/thread/3", category: "AI" }
+];
+
+const { threads = defaultThreads, title = "Recent Threads" } = Astro.props;
+---
+
+<div class="rounded-2xl border border-slate-700 bg-[#0f1419]/50 p-6 mb-6">
+  <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">
+    {title}
+  </h3>
+
+  <div class="space-y-2">
+    {threads.map((thread) => (
+      <a
+        href={thread.link}
+        class="group flex items-start gap-2 rounded-lg p-3 transition-all duration-200 hover:bg-[#1d2d3d]/50"
+      >
+        <span class="material-symbols-outlined text-base text-slate-500 group-hover:text-[#1d9bf0] flex-shrink-0 mt-0.5">
+          bookmark
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium text-slate-300 group-hover:text-[#1d9bf0] transition-colors truncate">
+            {thread.title}
+          </p>
+          {thread.category && (
+            <span class="text-xs text-slate-500 group-hover:text-slate-400 transition-colors">
+              {thread.category}
+            </span>
+          )}
+        </div>
+        <span class="material-symbols-outlined text-sm text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+          arrow_outward
+        </span>
+      </a>
+    ))}
+  </div>
+</div>
