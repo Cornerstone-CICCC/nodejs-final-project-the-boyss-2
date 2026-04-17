@@ -1,5 +1,29 @@
 ---
 import NewpostModal from "../pages/newpost_modal.astro";
+
+const token = Astro.cookies.get("token")?.value;
+let userData = null;
+
+if (token) {
+  try {
+    const response = await fetch("http://127.0.0.1:3000/api/users/me", {
+      headers: { 
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      userData = data.user;
+    }
+  } catch (e) {
+    console.error("Error network:", e);
+  }
+}
+
+const displayName = userData?.name || "Elena Vance";
+const displayHandle = userData?.username ? `@${userData.username}` : "@curator_vance";
+const initial = displayName.charAt(0).toUpperCase();
 ---
 
 <aside class="fixed left-0 top-0 flex h-screen w-64 flex-col bg-[#171c21] px-4 py-6 z-50">
@@ -134,18 +158,24 @@ import NewpostModal from "../pages/newpost_modal.astro";
     </div>
 
     <div class="flex cursor-pointer items-center gap-3 rounded-2xl bg-[#252a30] p-3 transition-all duration-200 hover:bg-[#30353b]">
-      <img
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkMU-4UmL7RNnqpiYRjFd1KcWjeCf8o72PxinskAq3jqTMRoqLKE67nO-Qb8aCv26QBEjtxzgxVidkBPdFLzT2L7nwUIMuWKuZKXg3TanYYtJmq4o8587znjd2FErmJ95BTArzAvSIeEuIfNlenfht_HK2DssA2VUy2TzkE1f2-LS8oyJnYEzs8_4eNhLz9lEPOw44VZD_zLmexr40x8JW6DxCI2TWRYebVKqKz6nj5PMU1EqCxzS_yqwj-cvzFQG3NBs-kTIHgqk"
-        alt="User profile"
-        class="h-10 w-10 rounded-full border border-slate-700 object-cover"
-      />
+      {userData ? (
+        <div class="h-10 w-10 rounded-full border border-slate-700 bg-[#1d9bf0]/20 flex items-center justify-center text-[#1d9bf0] font-bold">
+          {initial}
+        </div>
+      ) : (
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkMU-4UmL7RNnqpiYRjFd1KcWjeCf8o72PxinskAq3jqTMRoqLKE67nO-Qb8aCv26QBEjtxzgxVidkBPdFLzT2L7nwUIMuWKuZKXg3TanYYtJmq4o8587znjd2FErmJ95BTArzAvSIeEuIfNlenfht_HK2DssA2VUy2TzkE1f2-LS8oyJnYEzs8_4eNhLz9lEPOw44VZD_zLmexr40x8JW6DxCI2TWRYebVKqKz6nj5PMU1EqCxzS_yqwj-cvzFQG3NBs-kTIHgqk"
+          alt="User profile"
+          class="h-10 w-10 rounded-full border border-slate-700 object-cover"
+        />
+      )}
 
       <div class="min-w-0">
         <p class="truncate text-sm font-bold text-white">
-          Elena Vance
+          {displayName}
         </p>
         <p class="truncate text-[11px] text-slate-400">
-          @curator_vance
+          {displayHandle}
         </p>
       </div>
 
