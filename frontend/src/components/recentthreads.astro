@@ -1,5 +1,4 @@
 ---
-// RecentThreads Component - Section showing recent discussions
 interface ThreadItem {
   title: string;
   link: string;
@@ -12,9 +11,9 @@ interface Props {
 }
 
 const defaultThreads = [
-  { title: "Synthesizing Neo-Tokyo", link: "/thread/1", category: "Architecture" },
-  { title: "Architecture in the Abyss", link: "/thread/2", category: "Design" },
-  { title: "AI Philosophy 101", link: "/thread/3", category: "AI" }
+  { title: "Lorem Ipsum Dolor Sit", link: "/thread/1", category: "Architecture" },
+  { title: "Consectetur Adipiscing Elit", link: "/thread/2", category: "Design" },
+  { title: "Sed Do Eiusmod Tempor", link: "/thread/3", category: "AI" }
 ];
 
 const { threads = defaultThreads, title = "Recent Threads" } = Astro.props;

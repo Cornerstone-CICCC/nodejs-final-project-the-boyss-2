@@ -1,83 +1,100 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Sidebar from "../components/navbar.astro";
+import Navbar from "../components/navbar.astro";
+import Searchbar from "../components/searchbar.astro";
+import Highlights from "../components/highlights.astro";
+import RecentThreads from "../components/recentthreads.astro";
+import PostCard from "../components/postcard.astro";
+import RightSidebar from "../components/rightsidebar.astro";
 ---
 
 <Layout title="Dashboard | DevFeed">
-  <Sidebar />
+  <Navbar />
 
-  <div class="flex flex-col min-h-screen ml-64 bg-surface-container-lowest">
-    
-    <header class="w-full bg-surface-container font-['Inter'] antialiased tracking-tight sticky top-0 z-40 border-b border-outline-variant/10">
-      <div class="flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto">
-        <div class="text-sm font-medium text-on-surface-variant">Dashboard</div>
-        
-        <div class="flex items-center gap-6">
-          <span id="userName" class="text-on-surface-variant text-sm font-medium hidden md:block"></span>
-          <button id="logoutBtn" class="flex items-center gap-2 text-sm font-medium text-outline hover:text-error transition-colors cursor-pointer">
-            <span class="material-symbols-outlined text-[20px]">logout</span>
-            Logout
-          </button>
-        </div>
+  <RightSidebar />
+
+  <main class="ml-64 lg:mr-80 min-h-screen bg-[#0f1419] border-x border-slate-700">
+
+    <div class="sticky top-0 z-40 border-b border-slate-700 bg-[#0f1419]/80 backdrop-blur px-4 py-3 flex items-center justify-between">
+      <h2 class="text-xl font-bold text-white">Home</h2>
+      <div class="flex items-center gap-4">
+        <span id="userName" class="text-slate-400 text-sm hidden md:block"></span>
+        <button id="logoutBtn" class="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Logout
+        </button>
       </div>
-    </header>
+    </div>
 
-    <main class="flex-grow w-full max-w-screen-2xl mx-auto px-6 py-8">
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold tracking-tight text-on-surface mb-1">
-          Welcome back, <span id="userGreeting" class="text-primary">...</span>
-        </h1>
-        <p class="text-on-surface-variant text-sm">Here's your DevFeed overview.</p>
-      </div>
+    <div class="px-4 py-4 border-b border-slate-700">
+      <Searchbar />
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="material-symbols-outlined text-primary text-[24px]">article</span>
-            <span class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-outline">Posts</span>
-          </div>
-          <p class="text-3xl font-bold text-on-surface">0</p>
-          <p class="text-on-surface-variant text-xs mt-1">No posts yet</p>
-        </div>
-        
-        <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="material-symbols-outlined text-tertiary text-[24px]">group</span>
-            <span class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-outline">Followers</span>
-          </div>
-          <p class="text-3xl font-bold text-on-surface">0</p>
-          <p class="text-on-surface-variant text-xs mt-1">Start connecting</p>
-        </div>
+    <div class="px-4 py-4 border-b border-slate-700">
+      <Highlights />
+    </div>
 
-        <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="material-symbols-outlined text-secondary text-[24px]">chat_bubble</span>
-            <span class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-outline">Messages</span>
-          </div>
-          <p class="text-3xl font-bold text-on-surface">0</p>
-          <p class="text-on-surface-variant text-xs mt-1">No new messages</p>
-        </div>
-      </div>
+    <div class="px-4 py-4 border-b border-slate-700">
+      <RecentThreads />
+    </div>
 
-      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10 text-center">
-        <span class="material-symbols-outlined text-outline text-[48px] mb-4 block">dynamic_feed</span>
-        <h2 class="text-lg font-bold text-on-surface mb-2">Your feed is empty</h2>
-        <p class="text-on-surface-variant text-sm max-w-md mx-auto">
-          Start following other developers to see their posts here.
-        </p>
-      </div>
-    </main>
+    <div id="posts-feed">
+      <PostCard
+        author="Lorem Ipsum"
+        handle="@lorem_ipsum"
+        avatar="https://i.pravatar.cc/150?img=1"
+        timestamp="2h"
+        title="Lorem ipsum dolor sit amet consectetur"
+        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+        likes={89}
+        replies={12}
+        reposts={4}
+      />
+      <PostCard
+        author="Dolor Sit"
+        handle="@dolor_sit"
+        avatar="https://i.pravatar.cc/150?img=2"
+        timestamp="4h"
+        title="Adipiscing Elit Sed Do Eiusmod"
+        content="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+        likes={54}
+        replies={7}
+        reposts={2}
+      />
+      <PostCard
+        author="Amet Consectetur"
+        handle="@amet_dev"
+        avatar="https://i.pravatar.cc/150?img=3"
+        timestamp="6h"
+        content="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
+        likes={31}
+        replies={3}
+        reposts={1}
+      />
+      <PostCard
+        author="Adipiscing Dev"
+        handle="@adipiscing"
+        avatar="https://i.pravatar.cc/150?img=4"
+        timestamp="9h"
+        title="Nemo enim ipsam voluptatem quia"
+        content="Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt neque porro quisquam."
+        likes={102}
+        replies={18}
+        reposts={9}
+      />
+      <PostCard
+        author="Tempor Incididunt"
+        handle="@tempor_inc"
+        avatar="https://i.pravatar.cc/150?img=5"
+        timestamp="12h"
+        content="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate."
+        likes={67}
+        replies={9}
+        reposts={3}
+      />
+    </div>
 
-    <footer class="bg-[#0f1419] border-t border-slate-800/20 font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em]">
-      <div class="flex flex-col md:flex-row justify-between items-center px-8 py-10 w-full gap-4 max-w-screen-2xl mx-auto">
-        <div class="text-slate-500">© 2024 DevFeed.</div>
-        <div class="flex gap-6">
-          <a class="text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Privacy Policy</a>
-          <a class="text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Terms of Service</a>
-        </div>
-      </div>
-    </footer>
-  </div>
+  </main>
 </Layout>
 
 <script>
@@ -85,11 +102,8 @@ import Sidebar from "../components/navbar.astro";
 
   const user = await requireAuth();
 
-  const userGreeting = document.getElementById('userGreeting') as HTMLSpanElement;
   const userName = document.getElementById('userName') as HTMLSpanElement;
-
-  if (userGreeting && userName) {
-    userGreeting.textContent = user.name.split(' ')[0];
+  if (userName) {
     userName.textContent = `@${user.username}`;
   }
 

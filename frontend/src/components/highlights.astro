@@ -1,5 +1,4 @@
 ---
-// Highlights Component - Featured Content Section
 interface HighlightItem {
   title: string;
   description: string;
@@ -13,10 +12,10 @@ interface Props {
 
 const defaultItems = [
   {
-    title: "The Paradox of Empty Space",
-    description: "Clean design feels 'empty' when it lacks ++Intentional Anchors**. Without structural hierarchy, the eye wanders without purpose. High-density data doesn't need less information; it needs better ++Tonal Layering**.",
+    title: "Lorem Ipsum Dolor Sit Amet",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     insights: [
-      "By using shifts in surface value (#f17c21 to #252a30) instead of hard borders, we create a psychological map of importance that feels intuitive rather than restrictive."
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident."
     ],
     buttons: [
       { label: "Synthesize More", action: "synthesize" },
@@ -31,7 +30,6 @@ const { items = defaultItems } = Astro.props;
 <div class="space-y-4 mb-6">
   {items.map((item) => (
     <div class="rounded-2xl border border-slate-700 bg-gradient-to-br from-[#1d2d3d]/30 to-[#0f1419]/30 p-6 backdrop-blur-sm hover:border-[#1d9bf0]/50 transition-colors duration-200">
-      {/* Header with Icon */}
       <div class="flex items-start justify-between mb-4">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#1d9bf0]/20">
@@ -48,17 +46,14 @@ const { items = defaultItems } = Astro.props;
         </button>
       </div>
 
-      {/* Title */}
       <h3 class="text-lg font-bold text-white mb-3 hover:text-[#1d9bf0] cursor-pointer transition-colors">
         {item.title}
       </h3>
 
-      {/* Description */}
       <p class="text-slate-300 text-sm mb-4 leading-relaxed">
         {item.description}
       </p>
 
-      {/* Insights */}
       {item.insights && item.insights.length > 0 && (
         <div class="bg-[#0f1419]/50 rounded-lg p-3 mb-4 border border-slate-700/50">
           {item.insights.map((insight) => (
@@ -69,7 +64,6 @@ const { items = defaultItems } = Astro.props;
         </div>
       )}
 
-      {/* Action Buttons */}
       {item.buttons && item.buttons.length > 0 && (
         <div class="flex gap-2">
           {item.buttons.map((btn) => (

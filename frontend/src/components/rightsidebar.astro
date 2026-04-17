@@ -1,5 +1,4 @@
 ---
-// RightSidebar Component - Statistics and additional info sidebar
 interface SidebarItem {
   label: string;
   value: string | number;
@@ -12,16 +11,15 @@ interface Props {
 }
 
 const defaultItems = [
-  { label: "Cognitive Load", value: "2.4 / 10", change: "Down 12% from peak" },
+  { label: "Lorem Metric", value: "2.4 / 10", change: "Lorem ipsum dolor" },
   { label: "Active Users", value: "1,247", change: "↑ 23% today" },
-  { label: "Top Topics", value: "AI & Design", change: "Trending" }
+  { label: "Top Topics", value: "Lorem & Ipsum", change: "Trending" }
 ];
 
 const { title = "Cognitive Load Index", items = defaultItems } = Astro.props;
 ---
 
 <aside class="hidden lg:block fixed right-0 top-0 w-80 h-screen bg-[#0f1419]/50 border-l border-slate-700 p-6 overflow-y-auto">
-  {/* Header */}
   <div class="flex items-center gap-3 mb-6">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1d9bf0]/20">
       <span class="material-symbols-outlined text-[#1d9bf0]">
@@ -31,9 +29,8 @@ const { title = "Cognitive Load Index", items = defaultItems } = Astro.props;
     <h2 class="text-sm font-bold text-white">{title}</h2>
   </div>
 
-  {/* Stats Items */}
   <div class="space-y-6">
-    {items.map((item, index) => (
+    {items.map((item) => (
       <div class="rounded-lg bg-[#171c21] p-4 border border-slate-700 hover:border-[#1d9bf0]/50 transition-colors">
         <p class="text-xs text-slate-500 uppercase tracking-widest mb-2">
           {item.label}
@@ -50,7 +47,6 @@ const { title = "Cognitive Load Index", items = defaultItems } = Astro.props;
     ))}
   </div>
 
-  {/* Footer Info */}
   <div class="mt-8 pt-6 border-t border-slate-700">
     <p class="text-xs text-slate-500 mb-4 leading-relaxed">
       Dialogue is curated and enhanced by Kinetic AI
