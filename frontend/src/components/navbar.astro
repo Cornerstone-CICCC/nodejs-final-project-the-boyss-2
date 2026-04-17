@@ -7,8 +7,8 @@ let userData = null;
 if (token) {
   try {
     const response = await fetch("http://127.0.0.1:3000/api/users/me", {
-      headers: { 
-        'Authorization': `Bearer ${token}` 
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
     });
 
@@ -24,9 +24,16 @@ if (token) {
 const displayName = userData?.name || "Elena Vance";
 const displayHandle = userData?.username ? `@${userData.username}` : "@curator_vance";
 const initial = displayName.charAt(0).toUpperCase();
----
 
-<aside class="fixed left-0 top-0 flex h-screen w-64 flex-col bg-[#171c21] px-4 py-6 z-50">
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: "/dashboard", icon: "home", label: "Home" },
+  { href: "#", icon: "search", label: "Explore" },
+  { href: "/topliked", icon: "auto_awesome", label: "Top Liked" },
+  { href: "#", icon: "notifications", label: "Notifications" },
+  { href: "#", icon: "mail", label: "Messages" },
+];
   <div class="mb-8 flex items-center gap-3 px-2">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#1d9bf0] to-[#99cbff]">
       <span class="material-symbols-outlined text-lg text-[#003050]">
@@ -53,45 +60,22 @@ const initial = displayName.charAt(0).toUpperCase();
   </button>
 
   <nav class="mb-8 space-y-1">
-    <a
-      href="/dashboard"
-      class="flex items-center gap-3 border-l-4 border-[#99cbff] py-2 pl-4 text-[#99cbff]"
-    >
-      <span class="material-symbols-outlined">home</span>
-      <span class="text-sm font-medium">Home</span>
-    </a>
-
-    <a
-      href="#"
-      class="flex items-center gap-3 rounded-lg py-2 pl-5 text-slate-400 transition-colors duration-200 hover:bg-[#30353b] hover:text-white"
-    >
-      <span class="material-symbols-outlined">search</span>
-      <span class="text-sm font-medium">Explore</span>
-    </a>
-
-    <a
-      href="#"
-      class="flex items-center gap-3 rounded-lg py-2 pl-5 text-slate-400 transition-colors duration-200 hover:bg-[#30353b] hover:text-white"
-    >
-      <span class="material-symbols-outlined">auto_awesome</span>
-      <span class="text-sm font-medium">Top Liked</span>
-    </a>
-
-    <a
-      href="#"
-      class="flex items-center gap-3 rounded-lg py-2 pl-5 text-slate-400 transition-colors duration-200 hover:bg-[#30353b] hover:text-white"
-    >
-      <span class="material-symbols-outlined">notifications</span>
-      <span class="text-sm font-medium">Notifications</span>
-    </a>
-
-    <a
-      href="#"
-      class="flex items-center gap-3 rounded-lg py-2 pl-5 text-slate-400 transition-colors duration-200 hover:bg-[#30353b] hover:text-white"
-    >
-      <span class="material-symbols-outlined">mail</span>
-      <span class="text-sm font-medium">Messages</span>
-    </a>
+    {navLinks.map((link) => {
+      const isActive = currentPath === link.href;
+      return (
+        <a
+          href={link.href}
+          class={`flex items-center gap-3 py-2 transition-colors duration-200 ${
+            isActive
+              ? "border-l-4 border-[#99cbff] pl-4 text-[#99cbff]"
+              : "rounded-lg pl-5 text-slate-400 hover:bg-[#30353b] hover:text-white"
+          }`}
+        >
+          <span class="material-symbols-outlined">{link.icon}</span>
+          <span class="text-sm font-medium">{link.label}</span>
+        </a>
+      );
+    })}
   </nav>
 
   <div class="flex-grow overflow-y-auto pr-1 no-scrollbar">

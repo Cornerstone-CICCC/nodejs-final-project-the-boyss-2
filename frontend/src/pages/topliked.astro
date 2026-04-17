@@ -1,0 +1,152 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from "../components/navbar.astro";
+import RightSidebar from "../components/rightsidebar.astro";
+import Searchbar from "../components/searchbar.astro";
+import TopLikedCard from "../components/toplikedcard.astro";
+---
+
+<Layout title="Top Liked | DevFeed">
+  <Navbar />
+
+  <RightSidebar
+    title="Engagement Velocity"
+    items={[
+      { label: "Last 24 Hours", value: "↑ 18%", change: "Trending upward" },
+      { label: "Top Reach", value: "842k", change: "Across all posts" },
+      { label: "Total Shares", value: "3.2k", change: "Last 24 hours" }
+    ]}
+  />
+
+  <main class="ml-64 lg:mr-80 min-h-screen bg-[#0f1419] border-x border-slate-700">
+
+    <div class="sticky top-0 z-40 border-b border-slate-700 bg-[#0f1419]/80 backdrop-blur px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[#1d9bf0]">auto_awesome</span>
+        <h2 class="text-xl font-bold text-white">Top Liked</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="userName" class="text-slate-400 text-sm hidden md:block"></span>
+        <button id="logoutBtn" class="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="px-4 py-4 border-b border-slate-700">
+      <Searchbar />
+    </div>
+
+    <div class="px-6 py-6 border-b border-slate-700">
+      <h1 class="text-2xl font-extrabold text-white mb-1">Curated Highlights</h1>
+      <p class="text-slate-400 text-sm">Visualizing the threads that resonated most. An editorial perspective on your digital footprint.</p>
+    </div>
+
+    <div class="border-b border-slate-700">
+      <div class="relative mx-4 my-6 rounded-2xl overflow-hidden border border-slate-700 group cursor-pointer">
+        <img
+          src="https://images.unsplash.com/photo-1619472351888-f844a0b33f5b?w=900&q=80"
+          alt="Featured post"
+          class="w-full h-64 object-cover brightness-50 group-hover:brightness-60 transition-all duration-300"
+        />
+
+        <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5">
+          <span class="text-red-400">♥</span>
+          <span class="text-white text-sm font-bold">12.4k</span>
+        </div>
+
+        <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-[#1d9bf0] text-[16px]">trending_up</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#1d9bf0]">Viral Insight</span>
+          </div>
+          <h2 class="text-white font-extrabold text-xl leading-snug mb-2 max-w-lg">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+          </h2>
+          <p class="text-slate-300 text-sm max-w-lg leading-relaxed mb-4">
+            In a world of Lorem Ipsum dolor consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+          <div class="flex items-center gap-6 text-slate-400 text-xs">
+            <div>
+              <span class="text-white font-bold text-sm">842k</span>
+              <span class="ml-1 uppercase tracking-widest text-[10px]">Reach</span>
+            </div>
+            <div>
+              <span class="text-white font-bold text-sm">3.2k</span>
+              <span class="ml-1 uppercase tracking-widest text-[10px]">Shares</span>
+            </div>
+            <div class="flex items-center -space-x-2 ml-auto">
+              <img src="https://i.pravatar.cc/32?img=10" class="h-7 w-7 rounded-full border-2 border-[#0f1419]" alt="" />
+              <img src="https://i.pravatar.cc/32?img=11" class="h-7 w-7 rounded-full border-2 border-[#0f1419]" alt="" />
+              <div class="h-7 w-7 rounded-full border-2 border-[#0f1419] bg-[#1d9bf0] flex items-center justify-center text-[10px] font-bold text-white">+12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <TopLikedCard
+        rank={1}
+        title="Lorem ipsum as a functional defense mechanism."
+        excerpt="How reducing visual noise helps the brain focus on high-level decision making in complex information systems..."
+        likes={4200}
+        author="Lorem Ipsum"
+        handle="@lorem_ipsum"
+        avatar="https://i.pravatar.cc/150?img=1"
+      />
+      <TopLikedCard
+        rank={2}
+        title="The Digital Curator's Handbook: Volume I."
+        excerpt="Mastering the art of filtering 1,000 signals into 1 single, actionable insight for your community..."
+        likes={3900}
+        author="Dolor Sit"
+        handle="@dolor_sit"
+        avatar="https://i.pravatar.cc/150?img=2"
+      />
+      <TopLikedCard
+        rank={3}
+        title="Why we need 'slow social'."
+        excerpt="The case for platforms that prioritize reflection over reaction, and depth over reach..."
+        likes={2800}
+        author="Amet Consectetur"
+        handle="@amet_dev"
+        avatar="https://i.pravatar.cc/150?img=3"
+      />
+      <TopLikedCard
+        rank={4}
+        title="Adipiscing elit sed do eiusmod tempor."
+        excerpt="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute..."
+        likes={2100}
+        author="Adipiscing Dev"
+        handle="@adipiscing"
+        avatar="https://i.pravatar.cc/150?img=4"
+      />
+      <TopLikedCard
+        rank={5}
+        title="Excepteur sint occaecat cupidatat non proident."
+        excerpt="Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit..."
+        likes={1700}
+        author="Tempor Incididunt"
+        handle="@tempor_inc"
+        avatar="https://i.pravatar.cc/150?img=5"
+      />
+    </div>
+
+  </main>
+</Layout>
+
+<script>
+  import { requireAuth, logout } from '../lib/auth';
+
+  const user = await requireAuth();
+
+  const userName = document.getElementById('userName') as HTMLSpanElement;
+  if (userName) {
+    userName.textContent = `@${user.username}`;
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn') as HTMLButtonElement;
+  logoutBtn?.addEventListener('click', () => logout());
+</script>
