@@ -9,8 +9,6 @@ export interface AuthenticatedRequest extends Request {
 
 interface JwtPayload {
   id: number;
-  iat: number;
-  exp: number;
 }
 
 const protect = async (
@@ -19,7 +17,14 @@ const protect = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.cookies.token;
+    let token;
+
+    if (req.headers.authorization?.startsWith("Bearer")) {
+      token = req.headers.authorization.split(" ")[1];
+    } 
+    else if (req.cookies?.token) {
+      token = req.cookies.token;
+    }
 
     if (!token) {
       res.status(401).json({ message: "Not authorized, no token" });
