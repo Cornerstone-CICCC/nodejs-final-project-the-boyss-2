@@ -1,118 +1,16 @@
 ---
+// Redirect /profile to /profile/[current-user] — handled client-side
 import Layout from '../layouts/Layout.astro';
-import Sidebar from "../components/navbar.astro";
 ---
 
 <Layout title="Profile | DevFeed">
-  <Sidebar />
-
-  <main class="ml-64 min-h-screen bg-[#0f1419] text-[#dee3ea]">
-    <header class="sticky top-0 z-40 w-full bg-[#0f1419]/85 backdrop-blur-md border-b border-slate-800/50">
-      <div class="flex items-center px-6 h-16 max-w-4xl">
-        <a href="/dashboard" class="material-symbols-outlined text-[#f8f9fa] mr-6">arrow_back</a>
-        <div>
-          <h2 class="font-bold text-[#f8f9fa]" id="headerName">Profile</h2>
-          <p class="text-xs text-slate-500">View developer info</p>
-        </div>
-      </div>
-    </header>
-
-    <div class="max-w-4xl mx-auto">
-      <section class="relative">
-        <div class="h-48 w-full bg-slate-800">
-          <img class="w-full h-full object-cover opacity-50" src="https://i.pinimg.com/originals/77/65/30/7765304cbae8adb7391d778b51029b82.jpg" alt="cover" />
-        </div>
-        
-        <div class="px-8 -mt-16 flex justify-between items-end relative z-10">
-          <div class="p-1 bg-[#0f1419] rounded-full">
-            <img id="mainAvatar" class="w-32 h-32 rounded-full border-4 border-[#0f1419] object-cover" src="/images/default_avatar.jpeg" />
-          </div>
-          <button class="mb-4 px-6 py-2 rounded-full border border-slate-700 hover:bg-slate-800 font-bold text-sm transition-all">
-            Follow
-          </button>
-        </div>
-
-        <div class="px-8 mt-4 space-y-4">
-          <div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight" id="profileName">Loading...</h1>
-            <p class="text-slate-500 text-lg" id="profileHandle">@handle</p>
-          </div>
-          
-          <p id="profileBio" class="text-slate-300 max-w-4xl text-lg font-light leading-relaxed">
-            Loading developer description...
-          </p>
-          
-          <div class="flex gap-6 text-sm">
-            <div class="flex gap-1">
-              <span class="font-bold text-white" id="followingCount">0</span> 
-              <span class="text-slate-500">Following</span>
-            </div>
-            <div class="flex gap-1">
-              <span class="font-bold text-white" id="followersCount">0</span> 
-              <span class="text-slate-500">Followers</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <nav class="mt-8 flex border-b border-slate-800/50">
-        <a class="flex-1 text-center py-4 text-sm font-bold border-b-2 border-[#1d9bf0] text-white" href="#">Posts</a>
-        <a class="flex-1 text-center py-4 text-sm font-bold text-slate-500 hover:bg-slate-900" href="#">Media</a>
-        <a class="flex-1 text-center py-4 text-sm font-bold text-slate-500 hover:bg-slate-900" href="#">Likes</a>
-      </nav>
-    </div>
-  </main>
+  <div class="flex items-center justify-center h-screen bg-[#0f1419]">
+    <p class="text-slate-500">Redirecting...</p>
+  </div>
 </Layout>
 
 <script>
-  const usersData = {
-    igor: { 
-      name: "Igor Vargas", 
-      handle: "igor_the_dev", 
-      img: "/images/igor_profile.jpeg",
-      bio: "Passionate full-stack developer with extensive experience building modern web applications, scalable backend systems, and intuitive user interfaces. Skilled in creating clean, efficient, and maintainable code while delivering seamless user experiences across both front-end and back-end environments.",
-      following: "255",
-      followers: "20.5K"
-    },
-    arturo: { 
-      name: "Arturo Vazquez", 
-      handle: "@arturito_dev", 
-      img: "/images/arturo_profile.jpeg",
-      bio: "Experienced full-stack developer focused on developing high-performance applications with responsive interfaces and robust backend architecture. Strong background in designing scalable systems, optimizing application performance, and delivering reliable digital solutions from concept to deployment.",
-      following: "180",
-      followers: "18.2k"
-    },
-    leo: { 
-      name: "Leonardo Costa", 
-      handle: "@leo_dev", 
-      img: "/images/leo_profile.jpeg",
-      bio: "Junior full-stack developer passionate about building clean interfaces and learning scalable backend development. Motivated to create user-friendly applications, improve coding skills, and contribute to modern web projects with creativity and attention to detail.",
-      following: "490",
-      followers: "12.2K"
-    }
-  };
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const userParam = urlParams.get('user');
-
-  const activeUser = (userParam && userParam in usersData) ? userParam : 'leo';
-  const data = usersData[activeUser as keyof typeof usersData];
-
-  if (data) {
-    const profileName = document.getElementById('profileName');
-    const headerName = document.getElementById('headerName');
-    const profileHandle = document.getElementById('profileHandle');
-    const profileBio = document.getElementById('profileBio');
-    const followingCount = document.getElementById('followingCount');
-    const followersCount = document.getElementById('followersCount');
-    const mainAvatar = document.getElementById('mainAvatar') as HTMLImageElement;
-
-    if (profileName) profileName.textContent = data.name;
-    if (headerName) headerName.textContent = data.name;
-    if (profileHandle) profileHandle.textContent = data.handle;
-    if (profileBio) profileBio.textContent = data.bio; 
-    if (followingCount) followingCount.textContent = data.following;
-    if (followersCount) followersCount.textContent = data.followers;
-    if (mainAvatar) mainAvatar.src = data.img;
-  }
+  import { requireAuth } from '../lib/auth';
+  const user = await requireAuth();
+  window.location.href = `/profile/${user.username}`;
 </script>

@@ -3,6 +3,7 @@ import { socketAuthMiddleware } from "./auth.socket";
 import {
   createTweet,
   findTweetById,
+  findRepliesByTweetId,
   updateTweet,
   deleteTweet,
   toggleLike,
@@ -168,11 +169,30 @@ export const setupSocketHandlers = (io: SocketIOServer) => {
             userId: user.id,
             retweeted: result.retweeted,
             retweetCount,
+            tweet,
+            retweetedBy: { id: user.id, username: user.username, name: user.name },
           });
           callback?.({ ...result, retweetCount });
         } catch (error) {
           console.error("tweet:retweet error:", error);
           callback?.({ error: "Failed to toggle retweet" });
+        }
+      }
+    );
+
+    // ─── tweet:getReplies ───
+    socket.on(
+      "tweet:getReplies",
+      async (
+        data: { tweetId: number },
+        callback?: (response: any) => void
+      ) => {
+        try {
+          const replies = await findRepliesByTweetId(data.tweetId);
+          callback?.({ replies });
+        } catch (error) {
+          console.error("tweet:getReplies error:", error);
+          callback?.({ error: "Failed to get replies" });
         }
       }
     );

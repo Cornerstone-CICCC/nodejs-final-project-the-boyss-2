@@ -50,4 +50,12 @@ const searchUsers = async (query: string, limit: number = 10) => {
   });
 };
 
-export { createUser, findUserByEmail, findUserByUsername, findUserById, searchUsers };
+const getAllUsers = async (limit: number = 10) => {
+  return prisma.user.findMany({
+    select: { id: true, username: true, name: true },
+    take: limit,
+    orderBy: { id: "asc" },
+  });
+};
+
+export { createUser, findUserByEmail, findUserByUsername, findUserById, searchUsers, getAllUsers };

@@ -6,9 +6,9 @@ let userData = null;
 
 if (token) {
   try {
-    const response = await fetch("http://127.0.0.1:3000/api/users/me", {
+    const response = await fetch("http://127.0.0.1:3000/api/auth/me", {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Cookie': `token=${token}`
       }
     });
 
@@ -25,6 +25,21 @@ const displayName = userData?.name || "Elena Vance";
 const displayHandle = userData?.username ? `@${userData.username}` : "@curator_vance";
 const initial = displayName.charAt(0).toUpperCase();
 
+let topDevs: { id: number; username: string; name: string }[] = [];
+if (token) {
+  try {
+    const res = await fetch("http://127.0.0.1:3000/api/users/all?limit=10", {
+      headers: { 'Cookie': `token=${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      topDevs = (data.users || []).filter((u: any) => u.username !== userData?.username);
+    }
+  } catch (e) {
+    console.error("Error fetching top devs:", e);
+  }
+}
+
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
@@ -34,6 +49,17 @@ const navLinks = [
   { href: "#", icon: "notifications", label: "Notifications" },
   { href: "#", icon: "mail", label: "Messages" },
 ];
+---
+
+<!-- Mobile hamburger button -->
+<button id="mobileMenuBtn" class="fixed top-4 left-4 z-[55] md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-[#171c21] border border-slate-700/50 text-slate-300">
+  <span class="material-symbols-outlined" id="menuIcon">menu</span>
+</button>
+
+<!-- Mobile backdrop -->
+<div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-[49] hidden md:hidden"></div>
+
+<aside id="sidebar" class="fixed h-full w-64 left-0 top-0 bg-[#171c21] flex flex-col py-6 px-4 z-50 transition-transform duration-300 -translate-x-full md:translate-x-0">
   <div class="mb-8 flex items-center gap-3 px-2">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#1d9bf0] to-[#99cbff]">
       <span class="material-symbols-outlined text-lg text-[#003050]">
@@ -80,45 +106,26 @@ const navLinks = [
 
   <div class="flex-grow overflow-y-auto pr-1 no-scrollbar">
     <p class="mb-4 px-5 text-[10px] uppercase tracking-widest text-slate-500">
-      Top Developers
+      Developers
     </p>
 
     <div class="space-y-1">
-      <a href="/profile?user=igor" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-        <div class="flex items-center gap-3">
-          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-            <img src="/images/igor_profile.jpeg" alt="Igor Vargas" class="h-full w-full object-cover" />
+      {topDevs.map((dev) => (
+        <a href={`/profile/${dev.username}`} class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
+          <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-full bg-gradient-to-br from-[#1d9bf0] to-[#99cbff] flex items-center justify-center text-[#003050] font-bold text-sm">
+              {dev.name.charAt(0).toUpperCase()}
+            </div>
+            <span class="truncate text-sm text-slate-300 italic">{dev.name}</span>
           </div>
-          <span class="truncate text-sm text-slate-300 text-style italic">Igor Vargas</span>
-        </div>
-        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-          chevron_right
-        </span>
-      </a>
-
-      <a href="/profile?user=arturo" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-        <div class="flex items-center gap-3">
-          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-            <img src="/images/arturo_profile.jpeg" alt="Arturo Vazquez" class="h-full w-full object-cover" />
-          </div>
-          <span class="truncate text-sm text-slate-300 text-style italic">Arturo Vazquez</span>
-        </div>
-        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-          chevron_right
-        </span>
-      </a>
-
-      <a href="/profile?user=leo" class="group flex cursor-pointer items-center justify-between rounded-lg px-5 py-2.5 transition-all duration-200 hover:bg-[#30353b]">
-        <div class="flex items-center gap-3">
-          <div class="h-8 w-8 overflow-hidden rounded-full bg-slate-600">
-            <img src="/images/leo_profile.jpeg" alt="Leonardo Costa" class="h-full w-full object-cover" />
-          </div>
-          <span class="truncate text-sm text-slate-300 text-style italic">Leonardo Costa</span>
-        </div>
-        <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-          chevron_right
-        </span>
-      </a>
+          <span class="material-symbols-outlined text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            chevron_right
+          </span>
+        </a>
+      ))}
+      {topDevs.length === 0 && (
+        <p class="px-5 text-xs text-slate-500">No developers found</p>
+      )}
     </div>
   </div>
 
@@ -194,6 +201,38 @@ const navLinks = [
     if (target.closest('#closeModalBtn')) {
       modal?.classList.add('hidden');
     }
+  });
+
+  // Mobile sidebar toggle
+  const sidebar = document.getElementById('sidebar');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const menuIcon = document.getElementById('menuIcon');
+
+  function openSidebar() {
+    sidebar?.classList.remove('-translate-x-full');
+    backdrop?.classList.remove('hidden');
+    if (menuIcon) menuIcon.textContent = 'close';
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.add('-translate-x-full');
+    backdrop?.classList.add('hidden');
+    if (menuIcon) menuIcon.textContent = 'menu';
+  }
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    const isOpen = !sidebar?.classList.contains('-translate-x-full');
+    isOpen ? closeSidebar() : openSidebar();
+  });
+
+  backdrop?.addEventListener('click', closeSidebar);
+
+  // Close sidebar when navigating on mobile
+  sidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768) closeSidebar();
+    });
   });
 </script>
 

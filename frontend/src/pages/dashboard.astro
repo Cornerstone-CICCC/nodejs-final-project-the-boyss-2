@@ -1,107 +1,116 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from "../components/navbar.astro";
-import Searchbar from "../components/searchbar.astro";
-import Highlights from "../components/highlights.astro";
-import RecentThreads from "../components/recentthreads.astro";
-import PostCard from "../components/postcard.astro";
-import RightSidebar from "../components/rightsidebar.astro";
 ---
 
 <Layout title="Dashboard | DevFeed">
   <Navbar />
 
-  <RightSidebar />
+  <main class="flex-grow md:ml-64 flex flex-col h-screen bg-surface">
 
-  <main class="ml-64 lg:mr-80 min-h-screen bg-[#0f1419] border-x border-slate-700">
-
-    <div class="sticky top-0 z-40 border-b border-slate-700 bg-[#0f1419]/80 backdrop-blur px-4 py-3 flex items-center justify-between">
-      <h2 class="text-xl font-bold text-white">Home</h2>
-      <div class="flex items-center gap-4">
+    <!-- TopNavBar -->
+    <header class="sticky top-0 z-40 bg-[#0f1419]/85 backdrop-blur-md flex justify-between items-center px-4 md:px-8 py-4 border-b border-slate-700/50">
+      <div class="flex items-center gap-4 flex-grow max-w-xl ml-10 md:ml-0">
+        <div class="relative w-full">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+          <input
+            id="searchInput"
+            class="w-full bg-surface-container-high border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary/30 transition-all placeholder:text-slate-500"
+            placeholder="Search the dialogue..."
+            type="text"
+            autocomplete="off"
+          />
+          <!-- Search Results Dropdown -->
+          <div id="searchResults" class="absolute top-full left-0 w-full mt-2 bg-surface-container-high rounded-2xl border border-outline-variant/10 shadow-2xl overflow-hidden hidden z-50">
+            <div id="searchResultsList" class="max-h-64 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
         <span id="userName" class="text-slate-400 text-sm hidden md:block"></span>
-        <button id="logoutBtn" class="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors cursor-pointer">
+        <button id="logoutBtn" class="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors cursor-pointer ml-2 md:ml-4">
           <span class="material-symbols-outlined text-[18px]">logout</span>
-          Logout
+          <span class="hidden md:inline">Logout</span>
         </button>
+      </div>
+    </header>
+
+    <!-- Active Thread Content (Tweet Feed) -->
+    <div id="posts-feed" class="flex-grow overflow-y-auto no-scrollbar px-4 py-6 md:px-8 md:py-10 w-full">
+      <div class="space-y-6 md:space-y-8">
+        <!-- Tweets will be loaded here dynamically -->
+        <div id="tweets-container" class="space-y-6 md:space-y-8"></div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="text-center py-20">
+          <span class="material-symbols-outlined text-6xl text-slate-600 mb-4 block">forum</span>
+          <p class="text-slate-500 text-lg">No posts yet. Start the dialogue!</p>
+        </div>
+
       </div>
     </div>
 
-    <div class="px-4 py-4 border-b border-slate-700">
-      <Searchbar />
-    </div>
-
-    <div class="px-4 py-4 border-b border-slate-700">
-      <Highlights />
-    </div>
-
-    <div class="px-4 py-4 border-b border-slate-700">
-      <RecentThreads />
-    </div>
-
-    <div id="posts-feed">
-      <PostCard
-        author="Lorem Ipsum"
-        handle="@lorem_ipsum"
-        avatar="https://i.pravatar.cc/150?img=1"
-        timestamp="2h"
-        title="Lorem ipsum dolor sit amet consectetur"
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
-        likes={89}
-        replies={12}
-        reposts={4}
-      />
-      <PostCard
-        author="Dolor Sit"
-        handle="@dolor_sit"
-        avatar="https://i.pravatar.cc/150?img=2"
-        timestamp="4h"
-        title="Adipiscing Elit Sed Do Eiusmod"
-        content="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
-        likes={54}
-        replies={7}
-        reposts={2}
-      />
-      <PostCard
-        author="Amet Consectetur"
-        handle="@amet_dev"
-        avatar="https://i.pravatar.cc/150?img=3"
-        timestamp="6h"
-        content="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
-        likes={31}
-        replies={3}
-        reposts={1}
-      />
-      <PostCard
-        author="Adipiscing Dev"
-        handle="@adipiscing"
-        avatar="https://i.pravatar.cc/150?img=4"
-        timestamp="9h"
-        title="Nemo enim ipsam voluptatem quia"
-        content="Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt neque porro quisquam."
-        likes={102}
-        replies={18}
-        reposts={9}
-      />
-      <PostCard
-        author="Tempor Incididunt"
-        handle="@tempor_inc"
-        avatar="https://i.pravatar.cc/150?img=5"
-        timestamp="12h"
-        content="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate."
-        likes={67}
-        replies={9}
-        reposts={3}
-      />
+    <!-- Command Bar (The Compose Area) -->
+    <div class="w-full px-4 pb-4 pt-3 md:px-8 md:pb-8 md:pt-4 bg-background z-30 flex-shrink-0">
+      <div class="max-w-4xl mx-auto w-full">
+        <div class="bg-surface-container-high rounded-3xl p-2 pl-4 md:pl-6 flex items-center gap-2 md:gap-4 border border-outline-variant/10 shadow-2xl glass-effect">
+          <span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary transition-colors hidden md:block">add_circle</span>
+          <input
+            id="tweetInput"
+            class="flex-grow bg-transparent border-none focus:ring-0 text-slate-200 placeholder:text-slate-500 py-3 md:py-4 text-sm md:text-base"
+            placeholder="Add to the dialogue..."
+            type="text"
+          />
+          <div class="flex items-center gap-1 md:gap-2 pr-1 md:pr-2">
+            <span id="openMarkdownModal" class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary p-1.5 md:p-2 transition-colors" title="Write with Markdown">markdown</span>
+            <span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary p-1.5 md:p-2 transition-colors hidden md:block">image</span>
+            <span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary p-1.5 md:p-2 transition-colors hidden md:block">gif_box</span>
+            <button id="postBtn" class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container transition-transform active:scale-95 shadow-lg shadow-primary-container/20">
+              <span class="material-symbols-outlined font-bold">arrow_upward</span>
+            </button>
+          </div>
+        </div>
+        <div class="hidden md:flex justify-center mt-3">
+          <p class="text-[10px] text-slate-500 font-medium uppercase tracking-[0.1em]">Dialogue is curated and enhanced by Kinetic AI</p>
+        </div>
+      </div>
     </div>
 
   </main>
 </Layout>
 
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+</style>
+
 <script>
   import { requireAuth, logout } from '../lib/auth';
+  import { io, type Socket } from 'socket.io-client';
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  import hljs from 'highlight.js';
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code: string, lang: string) {
+        if (lang && hljs.getLanguage(lang)) {
+          return hljs.highlight(code, { language: lang }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      },
+    })
+  );
 
   const user = await requireAuth();
 
+  // ─── User info ───
   const userName = document.getElementById('userName') as HTMLSpanElement;
   if (userName) {
     userName.textContent = `@${user.username}`;
@@ -109,4 +118,398 @@ import RightSidebar from "../components/rightsidebar.astro";
 
   const logoutBtn = document.getElementById('logoutBtn') as HTMLButtonElement;
   logoutBtn?.addEventListener('click', () => logout());
+
+  // ─── Socket.IO connection (shared globally) ───
+  const socket: Socket = (window as any).__devfeed_socket || io('http://localhost:3000', {
+    withCredentials: true,
+  });
+  (window as any).__devfeed_socket = socket;
+
+  socket.on('connect', () => {
+    console.log('Socket connected:', socket.id);
+  });
+
+  // ─── Helpers ───
+  function timeAgo(date: string | Date): string {
+    const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h`;
+    const days = Math.floor(hours / 24);
+    return `${days}d`;
+  }
+
+  function renderMarkdown(content: string): string {
+    const result = marked.parse(content);
+    return typeof result === 'string' ? result : '';
+  }
+
+  function createTweetElement(tweet: any, retweetedBy?: any): HTMLElement {
+    const wrapper = document.createElement('div');
+    wrapper.dataset.tweetId = String(tweet.id);
+    wrapper.className = 'tweet-item';
+
+    const isOwner = tweet.author.id === user.id || tweet.authorId === user.id;
+
+    let retweetLabel = '';
+    if (retweetedBy) {
+      wrapper.id = `retweet-${retweetedBy.id}-${tweet.id}`;
+      retweetLabel = `
+        <div class="flex items-center gap-2 text-green-400 text-xs mb-2 pl-16">
+          <span class="material-symbols-outlined text-sm">repeat</span>
+          <span>${retweetedBy.name} retweeted</span>
+        </div>
+      `;
+    } else {
+      wrapper.id = `tweet-${tweet.id}`;
+    }
+
+    wrapper.innerHTML = `
+      ${retweetLabel}
+      <div class="flex gap-3 md:gap-4">
+        <div class="flex-shrink-0">
+          <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-base md:text-lg">
+            ${tweet.author.name.charAt(0).toUpperCase()}
+          </div>
+        </div>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-baseline gap-1 md:gap-2 min-w-0">
+              <span class="font-bold text-white text-sm md:text-base truncate">${tweet.author.name}</span>
+              <span class="text-xs md:text-sm text-slate-500 truncate">@${tweet.author.username} · ${timeAgo(tweet.createdAt)}</span>
+            </div>
+            ${isOwner ? `
+              <div class="flex items-center gap-1">
+                <button class="edit-btn p-1.5 rounded-full text-slate-500 hover:text-primary hover:bg-primary/10 transition-colors" title="Edit">
+                  <span class="material-symbols-outlined text-[16px]">edit</span>
+                </button>
+                <button class="delete-btn p-1.5 rounded-full text-slate-500 hover:text-red-400 hover:bg-red-400/10 transition-colors" title="Delete">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+          <div class="tweet-content text-sm md:text-base leading-relaxed text-slate-200 font-light mb-3 md:mb-4 prose prose-invert prose-sm max-w-none">${renderMarkdown(tweet.content)}</div>
+          <!-- Edit area (hidden by default) -->
+          <div class="edit-section hidden mb-4">
+            <textarea class="edit-textarea w-full bg-surface-container-high border border-outline-variant/10 rounded-xl p-3 text-sm text-slate-200 placeholder:text-slate-500 focus:ring-1 focus:ring-primary/30 resize-none" rows="3">${tweet.content}</textarea>
+            <div class="flex justify-end gap-2 mt-2">
+              <button class="edit-cancel-btn px-4 py-1.5 rounded-full text-xs text-slate-400 border border-slate-700 hover:bg-slate-800 transition-colors">Cancel</button>
+              <button class="edit-save-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-primary text-on-primary-container hover:brightness-110 transition-all">Save</button>
+            </div>
+          </div>
+          <div class="flex gap-4 md:gap-6 text-slate-500">
+            <span class="flex items-center gap-1 md:gap-1.5 cursor-pointer hover:text-primary transition-colors reply-btn" data-tweet-id="${tweet.id}">
+              <span class="material-symbols-outlined text-base md:text-lg">chat_bubble</span>
+              <span class="text-xs reply-count">${tweet._count?.replies || 0}</span>
+            </span>
+            <span class="flex items-center gap-1 md:gap-1.5 cursor-pointer hover:text-green-400 transition-colors retweet-btn" data-tweet-id="${tweet.id}">
+              <span class="material-symbols-outlined text-base md:text-lg">repeat</span>
+              <span class="text-xs retweet-count">${tweet._count?.retweets || 0}</span>
+            </span>
+            <span class="flex items-center gap-1 md:gap-1.5 cursor-pointer hover:text-pink-500 transition-colors like-btn" data-tweet-id="${tweet.id}">
+              <span class="material-symbols-outlined text-base md:text-lg">favorite</span>
+              <span class="text-xs like-count">${tweet._count?.likes || 0}</span>
+            </span>
+            <span class="flex items-center gap-1 md:gap-1.5 cursor-pointer hover:text-tertiary transition-colors">
+              <span class="material-symbols-outlined text-base md:text-lg">bookmark</span>
+            </span>
+          </div>
+          <!-- Reply section (hidden by default) -->
+          <div class="reply-section hidden mt-4">
+            <div class="replies-list space-y-3 mb-3"></div>
+            <div class="flex gap-3 items-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-xs flex-shrink-0">
+                ${user.name.charAt(0).toUpperCase()}
+              </div>
+              <input type="text" class="reply-input flex-grow bg-surface-container-high border border-outline-variant/10 rounded-full py-2 px-4 text-sm text-slate-200 placeholder:text-slate-500 focus:ring-1 focus:ring-primary/30" placeholder="Write a reply..." />
+              <button class="reply-submit-btn w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary-container transition-transform active:scale-95">
+                <span class="material-symbols-outlined text-sm">arrow_upward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Like button
+    const likeBtn = wrapper.querySelector('.like-btn') as HTMLElement;
+    likeBtn?.addEventListener('click', () => {
+      socket.emit('tweet:like', { tweetId: tweet.id });
+    });
+
+    // Retweet button
+    const retweetBtn = wrapper.querySelector('.retweet-btn') as HTMLElement;
+    retweetBtn?.addEventListener('click', () => {
+      socket.emit('tweet:retweet', { tweetId: tweet.id });
+    });
+
+    // Edit button
+    if (isOwner) {
+      const editBtn = wrapper.querySelector('.edit-btn') as HTMLElement;
+      const deleteBtn = wrapper.querySelector('.delete-btn') as HTMLElement;
+      const editSection = wrapper.querySelector('.edit-section') as HTMLElement;
+      const tweetContent = wrapper.querySelector('.tweet-content') as HTMLElement;
+      const editTextarea = wrapper.querySelector('.edit-textarea') as HTMLTextAreaElement;
+      const editCancel = wrapper.querySelector('.edit-cancel-btn') as HTMLElement;
+      const editSave = wrapper.querySelector('.edit-save-btn') as HTMLElement;
+
+      editBtn?.addEventListener('click', () => {
+        tweetContent.classList.add('hidden');
+        editSection.classList.remove('hidden');
+        editTextarea.focus();
+      });
+
+      editCancel?.addEventListener('click', () => {
+        editSection.classList.add('hidden');
+        tweetContent.classList.remove('hidden');
+        editTextarea.value = tweet.content;
+      });
+
+      editSave?.addEventListener('click', () => {
+        const newContent = editTextarea.value.trim();
+        if (!newContent || newContent === tweet.content) {
+          editSection.classList.add('hidden');
+          tweetContent.classList.remove('hidden');
+          return;
+        }
+        socket.emit('tweet:update', { tweetId: tweet.id, content: newContent }, (res: any) => {
+          if (res.error) {
+            console.error('Failed to update tweet:', res.error);
+          }
+        });
+      });
+
+      deleteBtn?.addEventListener('click', () => {
+        if (confirm('Delete this post?')) {
+          socket.emit('tweet:delete', { tweetId: tweet.id }, (res: any) => {
+            if (res.error) {
+              console.error('Failed to delete tweet:', res.error);
+            }
+          });
+        }
+      });
+    }
+
+    // Reply button — toggle reply section + load replies
+    const replyBtn = wrapper.querySelector('.reply-btn') as HTMLElement;
+    const replySection = wrapper.querySelector('.reply-section') as HTMLElement;
+    replyBtn?.addEventListener('click', () => {
+      const isHidden = replySection.classList.toggle('hidden');
+      if (!isHidden) {
+        loadReplies(tweet.id, wrapper);
+      }
+    });
+
+    // Reply submit
+    const replyInput = wrapper.querySelector('.reply-input') as HTMLInputElement;
+    const replySubmitBtn = wrapper.querySelector('.reply-submit-btn') as HTMLButtonElement;
+
+    function submitReply() {
+      const content = replyInput.value.trim();
+      if (!content) return;
+      socket.emit('tweet:create', { content, parentId: tweet.id }, (res: any) => {
+        if (!res.error) {
+          replyInput.value = '';
+          loadReplies(tweet.id, wrapper);
+          const countEl = wrapper.querySelector('.reply-count');
+          if (countEl) countEl.textContent = String(Number(countEl.textContent) + 1);
+        }
+      });
+    }
+
+    replySubmitBtn?.addEventListener('click', submitReply);
+    replyInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        submitReply();
+      }
+    });
+
+    return wrapper;
+  }
+
+  function loadReplies(tweetId: number, wrapper: HTMLElement) {
+    socket.emit('tweet:getReplies', { tweetId }, (res: any) => {
+      const replies = res.replies || [];
+      const repliesList = wrapper.querySelector('.replies-list') as HTMLElement;
+      if (replies.length === 0) {
+        repliesList.innerHTML = '<p class="text-xs text-slate-500 pl-11">No replies yet</p>';
+      } else {
+        repliesList.innerHTML = replies.map((r: any) => `
+          <div class="flex gap-3 pl-2 border-l-2 border-slate-700/50">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-[10px] flex-shrink-0">
+              ${r.author.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="font-semibold text-white text-xs">${r.author.name}</span>
+                <span class="text-slate-500 text-[10px]">@${r.author.username} · ${timeAgo(r.createdAt)}</span>
+              </div>
+              <div class="text-sm text-slate-300 prose prose-invert prose-sm max-w-none">${renderMarkdown(r.content)}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  }
+
+  // ─── Load tweets ───
+  const tweetsContainer = document.getElementById('tweets-container')!;
+  const emptyState = document.getElementById('empty-state')!;
+
+  async function loadTweets() {
+    try {
+      const res = await fetch('http://localhost:3000/api/tweets/feed', {
+        credentials: 'include',
+      });
+      const data = await res.json();
+      const tweets = data.tweets || [];
+
+      tweetsContainer.innerHTML = '';
+      if (tweets.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        tweets.forEach((tweet: any) => {
+          tweetsContainer.appendChild(createTweetElement(tweet));
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load tweets:', err);
+    }
+  }
+
+  await loadTweets();
+
+  // ─── Create tweet ───
+  const tweetInput = document.getElementById('tweetInput') as HTMLInputElement;
+  const postBtn = document.getElementById('postBtn') as HTMLButtonElement;
+
+  function submitTweet() {
+    const content = tweetInput.value.trim();
+    if (!content) return;
+    socket.emit('tweet:create', { content }, (res: any) => {
+      if (res.error) {
+        console.error('Failed to create tweet:', res.error);
+      } else {
+        tweetInput.value = '';
+      }
+    });
+  }
+
+  postBtn?.addEventListener('click', submitTweet);
+  tweetInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitTweet();
+    }
+  });
+
+  // ─── Real-time events ───
+  socket.on('tweet:created', ({ tweet }) => {
+    // Don't show replies in the main feed
+    if (tweet.parentId) return;
+    emptyState.classList.add('hidden');
+    tweetsContainer.prepend(createTweetElement(tweet));
+  });
+
+  socket.on('tweet:updated', ({ tweet }) => {
+    // Update all instances (original + retweets) of this tweet
+    document.querySelectorAll(`.tweet-item[data-tweet-id="${tweet.id}"]`).forEach((el) => {
+      const isRetweet = el.id.startsWith('retweet-');
+      el.replaceWith(createTweetElement(tweet, isRetweet ? { name: 'Someone' } : undefined));
+    });
+  });
+
+  socket.on('tweet:deleted', ({ tweetId }) => {
+    document.querySelectorAll(`.tweet-item[data-tweet-id="${tweetId}"]`).forEach((el) => el.remove());
+    if (tweetsContainer.children.length === 0) {
+      emptyState.classList.remove('hidden');
+    }
+  });
+
+  socket.on('tweet:liked', ({ tweetId, likeCount }) => {
+    document.querySelectorAll(`.tweet-item[data-tweet-id="${tweetId}"] .like-count`).forEach((el) => {
+      el.textContent = likeCount;
+    });
+  });
+
+  socket.on('tweet:retweeted', ({ tweetId, retweetCount, retweeted, tweet, retweetedBy }) => {
+    // Update retweet count on all instances of this tweet
+    document.querySelectorAll(`.tweet-item[data-tweet-id="${tweetId}"] .retweet-count`).forEach((el) => {
+      el.textContent = retweetCount;
+    });
+
+    // If someone retweeted, show it at the top of the feed
+    if (retweeted && tweet && retweetedBy) {
+      emptyState.classList.add('hidden');
+      tweetsContainer.prepend(createTweetElement(tweet, retweetedBy));
+    }
+
+    // If un-retweeted, remove the retweet entry
+    if (!retweeted && retweetedBy) {
+      const retweetEl = document.getElementById(`retweet-${retweetedBy.id}-${tweetId}`);
+      retweetEl?.remove();
+    }
+  });
+
+  // ─── Search users ───
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const searchResults = document.getElementById('searchResults')!;
+  const searchResultsList = document.getElementById('searchResultsList')!;
+  let searchTimeout: ReturnType<typeof setTimeout>;
+
+  searchInput?.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    const query = searchInput.value.trim();
+    if (query.length === 0) {
+      searchResults.classList.add('hidden');
+      return;
+    }
+    searchTimeout = setTimeout(async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/users/search?q=${encodeURIComponent(query)}`, {
+          credentials: 'include',
+        });
+        const data = await res.json();
+        const users = data.users || [];
+
+        if (users.length === 0) {
+          searchResultsList.innerHTML = `<div class="px-4 py-3 text-sm text-slate-500">No users found</div>`;
+        } else {
+          searchResultsList.innerHTML = users.map((u: any) => `
+            <a href="/profile/${u.username}" class="flex items-center gap-3 px-4 py-3 hover:bg-surface-bright/50 transition-colors cursor-pointer">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-sm">
+                ${u.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p class="text-sm font-medium text-white">${u.name}</p>
+                <p class="text-xs text-slate-500">@${u.username}</p>
+              </div>
+            </a>
+          `).join('');
+        }
+        searchResults.classList.remove('hidden');
+      } catch (err) {
+        console.error('Search failed:', err);
+      }
+    }, 300);
+  });
+
+  // Close search on outside click
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('#searchInput') && !(e.target as HTMLElement).closest('#searchResults')) {
+      searchResults.classList.add('hidden');
+    }
+  });
+
+  // Open markdown modal from compose bar icon
+  const markdownBtn = document.getElementById('openMarkdownModal');
+  const modalOverlay = document.getElementById('modalOverlay');
+  markdownBtn?.addEventListener('click', () => {
+    modalOverlay?.classList.remove('hidden');
+  });
 </script>

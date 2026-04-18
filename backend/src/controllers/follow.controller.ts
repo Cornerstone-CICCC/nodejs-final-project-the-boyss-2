@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 import { getFollowers, getFollowing } from "../models/follow.model";
-import { searchUsers } from "../models/user.model";
+import { searchUsers, findUserByUsername, getAllUsers } from "../models/user.model";
 
 const getUserFollowers = async (
   req: AuthenticatedRequest,
@@ -48,4 +48,35 @@ const searchUsersHandler = async (
   }
 };
 
-export { getUserFollowers, getUserFollowing, searchUsersHandler };
+const getUserByUsername = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const user = await findUserByUsername(req.params.username as string);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    res.json({ user: { id: user.id, username: user.username, name: user.name } });
+  } catch (error) {
+    console.error("getUserByUsername error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const listAllUsers = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const limit = Number(req.query.limit) || 10;
+    const users = await getAllUsers(limit);
+    res.json({ users });
+  } catch (error) {
+    console.error("listAllUsers error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { getUserFollowers, getUserFollowing, searchUsersHandler, getUserByUsername, listAllUsers };

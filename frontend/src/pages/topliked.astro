@@ -1,152 +1,139 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from "../components/navbar.astro";
-import RightSidebar from "../components/rightsidebar.astro";
-import Searchbar from "../components/searchbar.astro";
-import TopLikedCard from "../components/toplikedcard.astro";
 ---
 
 <Layout title="Top Liked | DevFeed">
   <Navbar />
 
-  <RightSidebar
-    title="Engagement Velocity"
-    items={[
-      { label: "Last 24 Hours", value: "↑ 18%", change: "Trending upward" },
-      { label: "Top Reach", value: "842k", change: "Across all posts" },
-      { label: "Total Shares", value: "3.2k", change: "Last 24 hours" }
-    ]}
-  />
+  <main class="md:ml-64 min-h-screen bg-surface">
 
-  <main class="ml-64 lg:mr-80 min-h-screen bg-[#0f1419] border-x border-slate-700">
-
-    <div class="sticky top-0 z-40 border-b border-slate-700 bg-[#0f1419]/80 backdrop-blur px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-[#1d9bf0]">auto_awesome</span>
-        <h2 class="text-xl font-bold text-white">Top Liked</h2>
+    <!-- TopNavBar -->
+    <header class="sticky top-0 z-40 w-full bg-[#0f1419]/85 backdrop-blur-md flex justify-between items-center px-4 md:px-8 py-4 border-b border-slate-700/50">
+      <div class="flex items-center gap-3 ml-10 md:ml-0">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+        <h2 class="text-lg md:text-xl font-bold text-white">Top Liked</h2>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 md:gap-4">
         <span id="userName" class="text-slate-400 text-sm hidden md:block"></span>
         <button id="logoutBtn" class="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors cursor-pointer">
           <span class="material-symbols-outlined text-[18px]">logout</span>
-          Logout
+          <span class="hidden md:inline">Logout</span>
         </button>
       </div>
-    </div>
+    </header>
 
-    <div class="px-4 py-4 border-b border-slate-700">
-      <Searchbar />
-    </div>
+    <section class="max-w-5xl mx-auto px-4 md:px-8 pt-6 md:pt-8 pb-16">
+      <div class="space-y-6 md:space-y-8" id="editorial-list"></div>
 
-    <div class="px-6 py-6 border-b border-slate-700">
-      <h1 class="text-2xl font-extrabold text-white mb-1">Curated Highlights</h1>
-      <p class="text-slate-400 text-sm">Visualizing the threads that resonated most. An editorial perspective on your digital footprint.</p>
-    </div>
-
-    <div class="border-b border-slate-700">
-      <div class="relative mx-4 my-6 rounded-2xl overflow-hidden border border-slate-700 group cursor-pointer">
-        <img
-          src="https://images.unsplash.com/photo-1619472351888-f844a0b33f5b?w=900&q=80"
-          alt="Featured post"
-          class="w-full h-64 object-cover brightness-50 group-hover:brightness-60 transition-all duration-300"
-        />
-
-        <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5">
-          <span class="text-red-400">♥</span>
-          <span class="text-white text-sm font-bold">12.4k</span>
-        </div>
-
-        <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-[#1d9bf0] text-[16px]">trending_up</span>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-[#1d9bf0]">Viral Insight</span>
-          </div>
-          <h2 class="text-white font-extrabold text-xl leading-snug mb-2 max-w-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-          </h2>
-          <p class="text-slate-300 text-sm max-w-lg leading-relaxed mb-4">
-            In a world of Lorem Ipsum dolor consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <div class="flex items-center gap-6 text-slate-400 text-xs">
-            <div>
-              <span class="text-white font-bold text-sm">842k</span>
-              <span class="ml-1 uppercase tracking-widest text-[10px]">Reach</span>
-            </div>
-            <div>
-              <span class="text-white font-bold text-sm">3.2k</span>
-              <span class="ml-1 uppercase tracking-widest text-[10px]">Shares</span>
-            </div>
-            <div class="flex items-center -space-x-2 ml-auto">
-              <img src="https://i.pravatar.cc/32?img=10" class="h-7 w-7 rounded-full border-2 border-[#0f1419]" alt="" />
-              <img src="https://i.pravatar.cc/32?img=11" class="h-7 w-7 rounded-full border-2 border-[#0f1419]" alt="" />
-              <div class="h-7 w-7 rounded-full border-2 border-[#0f1419] bg-[#1d9bf0] flex items-center justify-center text-[10px] font-bold text-white">+12</div>
-            </div>
-          </div>
-        </div>
+      <div id="topliked-empty" class="text-center py-16 hidden">
+        <span class="material-symbols-outlined text-5xl text-slate-600 mb-3 block">favorite</span>
+        <p class="text-slate-500">No top liked posts yet. Create some posts first!</p>
       </div>
-    </div>
-
-    <div>
-      <TopLikedCard
-        rank={1}
-        title="Lorem ipsum as a functional defense mechanism."
-        excerpt="How reducing visual noise helps the brain focus on high-level decision making in complex information systems..."
-        likes={4200}
-        author="Lorem Ipsum"
-        handle="@lorem_ipsum"
-        avatar="https://i.pravatar.cc/150?img=1"
-      />
-      <TopLikedCard
-        rank={2}
-        title="The Digital Curator's Handbook: Volume I."
-        excerpt="Mastering the art of filtering 1,000 signals into 1 single, actionable insight for your community..."
-        likes={3900}
-        author="Dolor Sit"
-        handle="@dolor_sit"
-        avatar="https://i.pravatar.cc/150?img=2"
-      />
-      <TopLikedCard
-        rank={3}
-        title="Why we need 'slow social'."
-        excerpt="The case for platforms that prioritize reflection over reaction, and depth over reach..."
-        likes={2800}
-        author="Amet Consectetur"
-        handle="@amet_dev"
-        avatar="https://i.pravatar.cc/150?img=3"
-      />
-      <TopLikedCard
-        rank={4}
-        title="Adipiscing elit sed do eiusmod tempor."
-        excerpt="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute..."
-        likes={2100}
-        author="Adipiscing Dev"
-        handle="@adipiscing"
-        avatar="https://i.pravatar.cc/150?img=4"
-      />
-      <TopLikedCard
-        rank={5}
-        title="Excepteur sint occaecat cupidatat non proident."
-        excerpt="Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit..."
-        likes={1700}
-        author="Tempor Incididunt"
-        handle="@tempor_inc"
-        avatar="https://i.pravatar.cc/150?img=5"
-      />
-    </div>
-
+    </section>
   </main>
 </Layout>
 
 <script>
   import { requireAuth, logout } from '../lib/auth';
+  import { io, type Socket } from 'socket.io-client';
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  import hljs from 'highlight.js';
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code: string, lang: string) {
+        if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
+        return hljs.highlightAuto(code).value;
+      },
+    })
+  );
 
   const user = await requireAuth();
+  const socket: Socket = (window as any).__devfeed_socket || io('http://localhost:3000', { withCredentials: true });
+  (window as any).__devfeed_socket = socket;
 
   const userName = document.getElementById('userName') as HTMLSpanElement;
-  if (userName) {
-    userName.textContent = `@${user.username}`;
-  }
+  if (userName) userName.textContent = `@${user.username}`;
 
   const logoutBtn = document.getElementById('logoutBtn') as HTMLButtonElement;
   logoutBtn?.addEventListener('click', () => logout());
+
+  function formatLikes(n: number): string {
+    return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+  }
+
+  function timeAgo(date: string | Date): string {
+    const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h`;
+    return `${Math.floor(hours / 24)}d`;
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/api/tweets/top?limit=20', {
+      credentials: 'include',
+    });
+    const data = await res.json();
+    const tweets = data.tweets || [];
+
+    if (tweets.length === 0) {
+      document.getElementById('topliked-empty')!.classList.remove('hidden');
+    } else {
+      const listContainer = document.getElementById('editorial-list')!;
+      listContainer.innerHTML = tweets.map((tweet: any, i: number) => `
+        <div class="grid grid-cols-[auto_1fr_auto] md:grid-cols-12 gap-3 md:gap-8 items-center group">
+          <div class="md:col-span-2 flex flex-row md:flex-col items-center justify-center md:border-r border-outline-variant/10 py-2 md:py-4 gap-2 md:gap-0">
+            <p class="text-2xl md:text-4xl font-black text-outline/20 group-hover:text-primary/40 transition-colors">${String(i + 1).padStart(2, '0')}</p>
+            <div class="md:mt-2 flex items-center gap-1 text-primary">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
+              <span class="text-xs font-bold">${formatLikes(tweet._count?.likes || 0)}</span>
+            </div>
+          </div>
+          <div class="md:col-span-7 min-w-0">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-[10px] flex-shrink-0">
+                ${tweet.author.name.charAt(0).toUpperCase()}
+              </div>
+              <span class="text-xs text-outline truncate">${tweet.author.name} · ${timeAgo(tweet.createdAt)}</span>
+            </div>
+            <div class="text-base md:text-lg font-bold mb-1 prose prose-invert max-w-none">${marked.parse(tweet.content)}</div>
+          </div>
+          <div class="md:col-span-3 flex justify-end gap-2 md:gap-4">
+            <button class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-outline-variant/20 flex items-center justify-center hover:bg-primary/10 hover:border-primary/40 transition-all like-btn" data-tweet-id="${tweet.id}">
+              <span class="material-symbols-outlined text-[20px] md:text-[24px]">favorite</span>
+            </button>
+            <button class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-outline-variant/20 flex items-center justify-center hover:bg-primary/10 hover:border-primary/40 transition-all retweet-btn" data-tweet-id="${tweet.id}">
+              <span class="material-symbols-outlined text-[20px] md:text-[24px]">repeat</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      // Attach listeners
+      listContainer.querySelectorAll('.like-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          socket.emit('tweet:like', { tweetId: Number((btn as HTMLElement).dataset.tweetId) });
+        });
+      });
+      listContainer.querySelectorAll('.retweet-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          socket.emit('tweet:retweet', { tweetId: Number((btn as HTMLElement).dataset.tweetId) });
+        });
+      });
+    }
+  } catch (err) {
+    console.error('Failed to load top liked:', err);
+  }
+
+  socket.on('tweet:liked', ({ tweetId, likeCount }: { tweetId: number; likeCount: number }) => {
+    document.querySelectorAll(`.like-count[data-tweet-id="${tweetId}"]`).forEach((el) => {
+      el.textContent = formatLikes(likeCount);
+    });
+  });
 </script>
