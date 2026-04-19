@@ -1,11 +1,7 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {
-  createUser,
-  findUserByEmail,
-  findUserByUsername,
-} from "../models/user.model";
+import { createUser, findUserByEmail, findUserByUsername, } from "../models/user.model";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 
 const generateToken = (userId: number): string => {
@@ -19,31 +15,27 @@ const setCookie = (res: Response, token: string): void => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
 
 const register = async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
     const { email, password, name, username } = req.body;
 
     if (!email || !password || !name || !username) {
-      res
-        .status(400)
-        .json({
-          message: "Please provide name, email, username, and password",
-        });
+      res.status(400).json({
+        message: "Please provide name, email, username, and password",
+      });
       return;
     }
 
     const existingEmail = await findUserByEmail(email);
     if (existingEmail) {
-      res
-        .status(400)
-        .json({ message: "User with this email already exists" });
+      res.status(400).json({ message: "User with this email already exists" });
       return;
     }
 
@@ -81,16 +73,14 @@ const register = async (
 };
 
 const login = async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res
-        .status(400)
-        .json({ message: "Please provide email and password" });
+      res.status(400).json({ message: "Please provide email and password" });
       return;
     }
 
@@ -125,7 +115,7 @@ const login = async (
 };
 
 const logout = async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
@@ -147,7 +137,12 @@ const getMe = async (
   res: Response
 ): Promise<void> => {
   try {
-    const user = req.user!;
+    const user = req.user;
+
+    if (!user) {
+      res.status(401).json({ message: "Not authenticated" });
+      return;
+    }
 
     res.json({
       user: {

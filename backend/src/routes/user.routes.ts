@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { protect } from "../middleware/auth.middleware";
+import { getMe } from "../controllers/auth.controller";
 import {
   getUserFollowers,
   getUserFollowing,
@@ -10,6 +11,7 @@ import {
 
 const userRouter = Router();
 
+userRouter.get("/me", protect, getMe);
 userRouter.get("/all", protect, listAllUsers);
 userRouter.get("/search", protect, searchUsersHandler);
 userRouter.get("/profile/:username", protect, getUserByUsername);

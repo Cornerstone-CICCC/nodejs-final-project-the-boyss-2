@@ -32,6 +32,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tweets", tweetRoutes);
 app.use("/api/users", userRoutes);
 
+
 // Health check
 app.get("/", (_req: Request, res: Response) => {
   res.json({ message: "API is running" });
