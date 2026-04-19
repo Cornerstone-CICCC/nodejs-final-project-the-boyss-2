@@ -89,6 +89,24 @@ const findUserTweetsAndRetweets = async (userId: number) => {
   );
 };
 
+const findAllTweets = async (limit: number = 50) => {
+  return prisma.tweet.findMany({
+    where: { parentId: null },
+    include: tweetInclude,
+    orderBy: { createdAt: "desc" },
+    take: limit,
+  });
+};
+
+const findTopLikedTweets = async (limit: number = 20) => {
+  return prisma.tweet.findMany({
+    where: { parentId: null },
+    include: tweetInclude,
+    orderBy: { likes: { _count: "desc" } },
+    take: limit,
+  });
+};
+
 const findTopLikedTweetsByUserId = async (
   userId: number,
   limit: number = 10
@@ -150,6 +168,8 @@ export {
   deleteTweet,
   findRepliesByTweetId,
   findTweetsByUserId,
+  findAllTweets,
+  findTopLikedTweets,
   findUserTweetsAndRetweets,
   findTopLikedTweetsByUserId,
   toggleLike,

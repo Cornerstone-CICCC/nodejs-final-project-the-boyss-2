@@ -4,6 +4,8 @@ import {
   findTweetById,
   findRepliesByTweetId,
   findTweetsByUserId,
+  findAllTweets,
+  findTopLikedTweets,
   findUserTweetsAndRetweets,
   findTopLikedTweetsByUserId,
 } from "../models/tweet.model";
@@ -81,4 +83,32 @@ const getUserTopTweets = async (
   }
 };
 
-export { getTweet, getTweetReplies, getUserTweets, getUserFeed, getUserTopTweets };
+const getGlobalFeed = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const limit = Number(req.query.limit) || 50;
+    const tweets = await findAllTweets(limit);
+    res.json({ tweets });
+  } catch (error) {
+    console.error("getGlobalFeed error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getGlobalTopLiked = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const limit = Number(req.query.limit) || 20;
+    const tweets = await findTopLikedTweets(limit);
+    res.json({ tweets });
+  } catch (error) {
+    console.error("getGlobalTopLiked error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { getTweet, getTweetReplies, getUserTweets, getUserFeed, getUserTopTweets, getGlobalFeed, getGlobalTopLiked };

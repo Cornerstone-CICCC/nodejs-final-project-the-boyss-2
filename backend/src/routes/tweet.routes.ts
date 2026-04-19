@@ -6,9 +6,15 @@ import {
   getUserTweets,
   getUserFeed,
   getUserTopTweets,
+  getGlobalFeed,
+  getGlobalTopLiked,
 } from "../controllers/tweet.controller";
 
 const tweetRouter = Router();
+
+// Global feed routes (before /user and /:id)
+tweetRouter.get("/feed", protect, getGlobalFeed);
+tweetRouter.get("/top", protect, getGlobalTopLiked);
 
 // /user/... routes before /:id to avoid param conflicts
 tweetRouter.get("/user/:userId", protect, getUserTweets);

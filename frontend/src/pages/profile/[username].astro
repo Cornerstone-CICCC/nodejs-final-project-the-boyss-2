@@ -1,0 +1,273 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Sidebar from "../../components/navbar.astro";
+
+export const prerender = false;
+const { username } = Astro.params;
+---
+
+<Layout title={`${username} | DevFeed`}>
+  <Sidebar />
+
+  <main class="md:ml-64 min-h-screen bg-[#0f1419] text-[#dee3ea]">
+    <header class="sticky top-0 z-40 w-full bg-[#0f1419]/85 backdrop-blur-md border-b border-slate-800/50">
+      <div class="flex items-center px-4 md:px-6 h-14 md:h-16">
+        <a href="/dashboard" class="material-symbols-outlined text-[#f8f9fa] mr-4 md:mr-6 ml-10 md:ml-0">arrow_back</a>
+        <div>
+          <h2 class="font-bold text-[#f8f9fa] text-sm md:text-base" id="headerName">Profile</h2>
+          <p class="text-xs text-slate-500" id="headerPostCount">Loading...</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto">
+      <section class="relative">
+        <div class="h-32 md:h-48 w-full bg-slate-800">
+          <img class="w-full h-full object-cover opacity-50" src="https://i.pinimg.com/originals/77/65/30/7765304cbae8adb7391d778b51029b82.jpg" alt="cover" />
+        </div>
+
+        <div class="px-4 -mt-12 md:px-8 md:-mt-16 flex justify-between items-end relative z-10">
+          <div class="p-1 bg-[#0f1419] rounded-full">
+            <div id="mainAvatar" class="w-20 h-20 md:w-32 md:h-32 rounded-full border-4 border-[#0f1419] bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-3xl md:text-5xl">
+              ?
+            </div>
+          </div>
+          <button id="followBtn" class="mb-2 md:mb-4 px-5 md:px-6 py-1.5 md:py-2 rounded-full border border-slate-700 hover:bg-slate-800 font-bold text-sm transition-all hidden">
+            Follow
+          </button>
+        </div>
+
+        <div class="px-4 md:px-8 mt-3 md:mt-4 space-y-3 md:space-y-4">
+          <div>
+            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight" id="profileName">Loading...</h1>
+            <p class="text-slate-500 text-base md:text-lg" id="profileHandle">@{username}</p>
+          </div>
+
+          <div class="flex gap-4 md:gap-6 text-sm">
+            <div class="flex gap-1">
+              <span class="font-bold text-white" id="followingCount">0</span>
+              <span class="text-slate-500">Following</span>
+            </div>
+            <div class="flex gap-1">
+              <span class="font-bold text-white" id="followersCount">0</span>
+              <span class="text-slate-500">Followers</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="mt-6 md:mt-8 flex border-b border-slate-800/50">
+        <button class="tab-btn flex-1 text-center py-3 md:py-4 text-sm font-bold border-b-2 border-[#1d9bf0] text-white" data-tab="posts">Posts</button>
+        <button class="tab-btn flex-1 text-center py-3 md:py-4 text-sm font-bold text-slate-500 hover:bg-slate-900 border-b-2 border-transparent" data-tab="likes">Top Liked</button>
+      </nav>
+
+      <div id="posts-tab" class="divide-y divide-slate-800/50"></div>
+      <div id="likes-tab" class="divide-y divide-slate-800/50 hidden"></div>
+
+      <div id="profile-empty" class="text-center py-16 hidden">
+        <span class="material-symbols-outlined text-5xl text-slate-600 mb-3 block">article</span>
+        <p class="text-slate-500">No posts yet</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script define:vars={{ username }}>
+  window.__PROFILE_USERNAME__ = username;
+</script>
+
+<script>
+  import { requireAuth } from '../../lib/auth';
+  import { io, type Socket } from 'socket.io-client';
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  import hljs from 'highlight.js';
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code: string, lang: string) {
+        if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
+        return hljs.highlightAuto(code).value;
+      },
+    })
+  );
+
+  const currentUser = await requireAuth();
+  const socket: Socket = io('http://localhost:3000', { withCredentials: true });
+
+  const profileUsername = (window as any).__PROFILE_USERNAME__ || currentUser.username;
+  const isOwnProfile = profileUsername === currentUser.username;
+
+  function timeAgo(date: string | Date): string {
+    const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h`;
+    return `${Math.floor(hours / 24)}d`;
+  }
+
+  function createPostItem(tweet: any): string {
+    return `
+      <article class="px-4 py-4 md:px-8 md:py-5 hover:bg-[#171c21]/50 transition-colors">
+        <div class="flex gap-3 md:gap-4">
+          <div class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold flex-shrink-0 text-sm md:text-base">
+            ${tweet.author.name.charAt(0).toUpperCase()}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1 md:gap-2 mb-1">
+              <span class="font-bold text-white text-sm md:text-base truncate">${tweet.author.name}</span>
+              <span class="text-slate-500 text-xs md:text-sm truncate">@${tweet.author.username} · ${timeAgo(tweet.createdAt)}</span>
+            </div>
+            <div class="text-slate-200 text-sm leading-relaxed mb-3 prose prose-invert prose-sm max-w-none">${marked.parse(tweet.content)}</div>
+            <div class="flex gap-4 md:gap-6 text-slate-500 text-xs">
+              <span class="flex items-center gap-1 hover:text-primary cursor-pointer">
+                <span class="material-symbols-outlined text-base">chat_bubble</span> ${tweet._count?.replies || 0}
+              </span>
+              <span class="flex items-center gap-1 hover:text-green-400 cursor-pointer retweet-btn" data-tweet-id="${tweet.id}">
+                <span class="material-symbols-outlined text-base">repeat</span>
+                <span class="retweet-count">${tweet._count?.retweets || 0}</span>
+              </span>
+              <span class="flex items-center gap-1 hover:text-pink-500 cursor-pointer like-btn" data-tweet-id="${tweet.id}">
+                <span class="material-symbols-outlined text-base">favorite</span>
+                <span class="like-count">${tweet._count?.likes || 0}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  async function findProfileUser() {
+    const res = await fetch(`http://localhost:3000/api/users/profile/${encodeURIComponent(profileUsername)}`, {
+      credentials: 'include',
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.user;
+  }
+
+  const profileUser = isOwnProfile
+    ? { id: currentUser.id, name: currentUser.name, username: currentUser.username }
+    : await findProfileUser();
+
+  if (!profileUser) {
+    document.getElementById('profileName')!.textContent = 'User not found';
+    document.getElementById('profileHandle')!.textContent = '';
+    document.getElementById('headerPostCount')!.textContent = '';
+  } else {
+    const userId = profileUser.id;
+
+    document.getElementById('profileName')!.textContent = profileUser.name;
+    document.getElementById('headerName')!.textContent = profileUser.name;
+    document.getElementById('profileHandle')!.textContent = `@${profileUser.username}`;
+    document.getElementById('mainAvatar')!.textContent = profileUser.name.charAt(0).toUpperCase();
+
+    const followBtn = document.getElementById('followBtn') as HTMLButtonElement;
+    if (!isOwnProfile) {
+      followBtn.classList.remove('hidden');
+      followBtn.addEventListener('click', () => {
+        socket.emit('user:follow', { userId }, (res: any) => {
+          if (!res.error) {
+            followBtn.textContent = res.followed ? 'Following' : 'Follow';
+            followBtn.classList.toggle('bg-primary-container', res.followed);
+            followBtn.classList.toggle('text-on-primary-container', res.followed);
+            loadFollowCounts();
+          }
+        });
+      });
+    }
+
+    async function loadFollowCounts() {
+      const [followersRes, followingRes] = await Promise.all([
+        fetch(`http://localhost:3000/api/users/${userId}/followers`, { credentials: 'include' }),
+        fetch(`http://localhost:3000/api/users/${userId}/following`, { credentials: 'include' }),
+      ]);
+      const followers = await followersRes.json();
+      const following = await followingRes.json();
+      document.getElementById('followersCount')!.textContent = String(followers.followers?.length || 0);
+      document.getElementById('followingCount')!.textContent = String(following.following?.length || 0);
+    }
+
+    async function loadPosts() {
+      const res = await fetch(`http://localhost:3000/api/tweets/user/${userId}`, { credentials: 'include' });
+      const data = await res.json();
+      const tweets = data.tweets || [];
+
+      const postsTab = document.getElementById('posts-tab')!;
+      const emptyEl = document.getElementById('profile-empty')!;
+      document.getElementById('headerPostCount')!.textContent = `${tweets.length} posts`;
+
+      if (tweets.length === 0) {
+        emptyEl.classList.remove('hidden');
+      } else {
+        postsTab.innerHTML = tweets.map(createPostItem).join('');
+        attachInteractionListeners(postsTab);
+      }
+    }
+
+    async function loadTopLiked() {
+      const res = await fetch(`http://localhost:3000/api/tweets/user/${userId}/top?limit=20`, { credentials: 'include' });
+      const data = await res.json();
+      const tweets = data.tweets || [];
+
+      const likesTab = document.getElementById('likes-tab')!;
+      if (tweets.length > 0) {
+        likesTab.innerHTML = tweets.map(createPostItem).join('');
+        attachInteractionListeners(likesTab);
+      } else {
+        likesTab.innerHTML = '<div class="text-center py-16 text-slate-500">No top liked posts yet</div>';
+      }
+    }
+
+    function attachInteractionListeners(container: HTMLElement) {
+      container.querySelectorAll('.like-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tweetId = Number((btn as HTMLElement).dataset.tweetId);
+          socket.emit('tweet:like', { tweetId });
+        });
+      });
+      container.querySelectorAll('.retweet-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tweetId = Number((btn as HTMLElement).dataset.tweetId);
+          socket.emit('tweet:retweet', { tweetId });
+        });
+      });
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((b) => {
+          b.classList.remove('border-[#1d9bf0]', 'text-white');
+          b.classList.add('border-transparent', 'text-slate-500');
+        });
+        btn.classList.add('border-[#1d9bf0]', 'text-white');
+        btn.classList.remove('border-transparent', 'text-slate-500');
+
+        const tab = (btn as HTMLElement).dataset.tab;
+        document.getElementById('posts-tab')!.classList.toggle('hidden', tab !== 'posts');
+        document.getElementById('likes-tab')!.classList.toggle('hidden', tab !== 'likes');
+        document.getElementById('profile-empty')!.classList.add('hidden');
+      });
+    });
+
+    // Real-time
+    socket.on('tweet:liked', ({ tweetId, likeCount }) => {
+      document.querySelectorAll(`[data-tweet-id="${tweetId}"].like-btn .like-count`).forEach((el) => {
+        el.textContent = likeCount;
+      });
+    });
+
+    socket.on('tweet:retweeted', ({ tweetId, retweetCount }) => {
+      document.querySelectorAll(`[data-tweet-id="${tweetId}"].retweet-btn .retweet-count`).forEach((el) => {
+        el.textContent = retweetCount;
+      });
+    });
+
+    await Promise.all([loadPosts(), loadTopLiked(), loadFollowCounts()]);
+  }
+</script>

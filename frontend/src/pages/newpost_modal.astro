@@ -2,11 +2,11 @@
 // newpost_modal.astro
 ---
 
-<div class="fixed inset-0 flex items-center justify-center bg-[#0f1419]/60 backdrop-blur-sm p-4">
-  <div class="w-full max-w-xl overflow-hidden rounded-3xl border border-outline-variant/20 border-l-4 border-l-[#1d9bf0] bg-surface-container-high shadow-2xl">
-    
+<div class="fixed inset-0 flex items-end md:items-center justify-center bg-[#0f1419]/60 backdrop-blur-sm p-0 md:p-4">
+  <div class="w-full max-w-xl overflow-hidden rounded-t-3xl md:rounded-3xl border border-outline-variant/20 border-l-0 md:border-l-4 border-l-[#1d9bf0] bg-surface-container-high shadow-2xl max-h-[90vh] overflow-y-auto">
+
     <!-- Header -->
-    <div class="flex items-center justify-between border-b border-outline-variant/10 px-6 py-4">
+    <div class="flex items-center justify-between border-b border-outline-variant/10 px-4 md:px-6 py-3 md:py-4">
       <button
         id="closeModalBtn"
         class="rounded-full p-2 text-on-surface transition-colors hover:bg-surface-container-highest"
@@ -24,20 +24,53 @@
     </div>
 
     <!-- Content -->
-    <div class="p-6">
-      <div class="flex gap-4">
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTUHe_wXx8HjqipRq0r5_xmX7tlKpFcsCotlvDeKhVTca8lCcC-ZFO-kjIxJqsTcG98Ngzb-5101afvAZwZu44c7sYoqFNibw-ejqd11l0qplRmRvt0z4ySDoJ8geot0OCIgsAyswi77xgu6DvxT-MoUUfsWhVY4Ql1GDdAWiOlwkXf-jaHwv0OtSE7ZSqEgdw89PbCHJ41lrGHI4pwjx6rmvcV3YdY-5uxLdVlEWkDPRWM0pIWXzyMdbiBw3ag3e0ANrTNdVwik"
-          alt="User profile"
-          class="h-12 w-12 rounded-full bg-surface-container-highest"
-        />
+    <div class="p-4 md:p-6">
+      <div class="flex gap-3 md:gap-4">
+        <div id="modalAvatar" class="h-10 w-10 md:h-12 md:w-12 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary-container font-bold text-base md:text-lg flex-shrink-0 hidden md:flex">
+          ?
+        </div>
 
-        <div class="flex-1 space-y-4">
+        <div class="flex-1 space-y-3 md:space-y-4">
+          <!-- Markdown toolbar -->
+          <div class="flex flex-wrap items-center gap-1 border-b border-outline-variant/10 pb-2">
+            <button data-md="bold" title="Bold" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors text-xs font-bold">B</button>
+            <button data-md="italic" title="Italic" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors text-xs italic">I</button>
+            <button data-md="code" title="Code" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[16px]">code</span>
+            </button>
+            <button data-md="codeblock" title="Code Block" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[16px]">data_object</span>
+            </button>
+            <button data-md="link" title="Link" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[16px]">link</span>
+            </button>
+            <button data-md="h1" title="Heading" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors text-xs font-bold">H</button>
+            <button data-md="ul" title="List" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
+            </button>
+            <button data-md="quote" title="Quote" class="md-btn rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[16px]">format_quote</span>
+            </button>
+            <div class="ml-auto flex items-center gap-1">
+              <button id="togglePreviewBtn" class="rounded p-1.5 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors text-[11px] uppercase tracking-wider font-semibold">Preview</button>
+            </div>
+          </div>
+
           <textarea
-            rows="6"
-            placeholder="What is on your mind?"
-            class="w-full resize-none border-none bg-transparent p-0 text-lg text-on-surface placeholder:text-outline/50 focus:ring-0"
+            id="modalTextarea"
+            rows="4"
+            placeholder="What is on your mind? (Markdown supported)"
+            class="w-full resize-none border-none bg-transparent p-0 text-base md:text-lg text-on-surface placeholder:text-outline/50 focus:ring-0"
           ></textarea>
+
+          <!-- Markdown preview -->
+          <div id="modalPreview" class="hidden prose prose-invert prose-sm max-w-none rounded-lg bg-surface-container-low p-4 text-slate-200 border border-outline-variant/10 max-h-48 overflow-y-auto"></div>
+
+          <!-- Character count -->
+          <div class="flex items-center justify-between">
+            <span id="modalCharCount" class="text-xs text-slate-500">0 characters</span>
+            <span id="modalError" class="text-xs text-red-400 hidden"></span>
+          </div>
 
           <!-- Actions -->
           <div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
@@ -45,57 +78,17 @@
               <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
                 <span class="material-symbols-outlined">image</span>
               </button>
-
               <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
                 <span class="material-symbols-outlined">gif_box</span>
               </button>
-
-              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
-                <span class="material-symbols-outlined">analytics</span>
-              </button>
-
               <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
                 <span class="material-symbols-outlined">sentiment_satisfied</span>
               </button>
-
-              <button class="rounded-full p-2 transition-colors hover:bg-primary/10">
-                <span class="material-symbols-outlined">schedule</span>
-              </button>
             </div>
 
-            <div class="flex items-center gap-4">
-              <div class="relative h-6 w-6">
-                <svg class="h-full w-full -rotate-90">
-                  <circle
-                    class="text-outline-variant/30"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    fill="transparent"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  ></circle>
-
-                  <circle
-                    class="text-primary"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    fill="transparent"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-dasharray="62.8"
-                    stroke-dashoffset="40"
-                  ></circle>
-                </svg>
-              </div>
-
-              <div class="h-8 w-[1px] bg-outline-variant/30"></div>
-
-              <button class="rounded-full bg-gradient-to-r from-primary-container to-primary px-8 py-2.5 text-sm font-bold tracking-wide text-on-primary-container shadow-lg transition-all duration-200 active:scale-95">
-                Post
-              </button>
-            </div>
+            <button id="modalPostBtn" class="rounded-full bg-gradient-to-r from-primary-container to-primary px-8 py-2.5 text-sm font-bold tracking-wide text-on-primary-container shadow-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              Post
+            </button>
           </div>
         </div>
       </div>
@@ -111,8 +104,128 @@
       </span>
 
       <span class="text-xs italic text-outline">
-        DevFeed Tip: Use "#" to connect your post to trending topics.
+        DevFeed Tip: Use markdown to format your posts — **bold**, *italic*, `code`, and more.
       </span>
     </div>
   </div>
 </div>
+
+<script>
+  import { io, type Socket } from 'socket.io-client';
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  import hljs from 'highlight.js';
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code: string, lang: string) {
+        if (lang && hljs.getLanguage(lang)) {
+          return hljs.highlight(code, { language: lang }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      },
+    })
+  );
+
+  // Reuse existing socket if available, otherwise create one
+  const socket: Socket = (window as any).__devfeed_socket || io('http://localhost:3000', { withCredentials: true });
+  (window as any).__devfeed_socket = socket;
+
+  const textarea = document.getElementById('modalTextarea') as HTMLTextAreaElement;
+  const postBtn = document.getElementById('modalPostBtn') as HTMLButtonElement;
+  const charCount = document.getElementById('modalCharCount')!;
+  const errorEl = document.getElementById('modalError')!;
+  const previewEl = document.getElementById('modalPreview')!;
+  const togglePreviewBtn = document.getElementById('togglePreviewBtn')!;
+  const modal = document.getElementById('modalOverlay');
+  const avatarEl = document.getElementById('modalAvatar')!;
+
+  // Load user initial
+  const cached = sessionStorage.getItem('devfeed_user');
+  if (cached) {
+    const user = JSON.parse(cached);
+    avatarEl.textContent = user.name.charAt(0).toUpperCase();
+  }
+
+  // Character count & enable/disable post
+  textarea?.addEventListener('input', () => {
+    const len = textarea.value.trim().length;
+    charCount.textContent = `${len} characters`;
+    postBtn.disabled = len === 0;
+  });
+
+  // Markdown toolbar
+  document.querySelectorAll('.md-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const action = (btn as HTMLElement).dataset.md;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = textarea.value.substring(start, end);
+      let replacement = '';
+
+      switch (action) {
+        case 'bold': replacement = `**${selected || 'bold text'}**`; break;
+        case 'italic': replacement = `*${selected || 'italic text'}*`; break;
+        case 'code': replacement = `\`${selected || 'code'}\``; break;
+        case 'codeblock': replacement = `\n\`\`\`\n${selected || 'code block'}\n\`\`\`\n`; break;
+        case 'link': replacement = `[${selected || 'text'}](url)`; break;
+        case 'h1': replacement = `\n## ${selected || 'heading'}\n`; break;
+        case 'ul': replacement = `\n- ${selected || 'list item'}\n`; break;
+        case 'quote': replacement = `\n> ${selected || 'quote'}\n`; break;
+      }
+
+      textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+      textarea.focus();
+      const newPos = start + replacement.length;
+      textarea.setSelectionRange(newPos, newPos);
+      textarea.dispatchEvent(new Event('input'));
+    });
+  });
+
+  // Toggle preview
+  let previewing = false;
+  togglePreviewBtn?.addEventListener('click', () => {
+    previewing = !previewing;
+    if (previewing) {
+      previewEl.innerHTML = marked.parse(textarea.value || '*Nothing to preview*') as string;
+      previewEl.classList.remove('hidden');
+      textarea.classList.add('hidden');
+      togglePreviewBtn.textContent = 'Edit';
+    } else {
+      previewEl.classList.add('hidden');
+      textarea.classList.remove('hidden');
+      togglePreviewBtn.textContent = 'Preview';
+    }
+  });
+
+  // Post tweet
+  postBtn?.addEventListener('click', () => {
+    const content = textarea.value.trim();
+    if (!content) return;
+
+    postBtn.disabled = true;
+    errorEl.classList.add('hidden');
+
+    socket.emit('tweet:create', { content }, (res: any) => {
+      if (res.error) {
+        errorEl.textContent = res.error;
+        errorEl.classList.remove('hidden');
+        postBtn.disabled = false;
+      } else {
+        textarea.value = '';
+        charCount.textContent = '0 characters';
+        postBtn.disabled = true;
+        if (previewing) {
+          previewEl.classList.add('hidden');
+          textarea.classList.remove('hidden');
+          togglePreviewBtn.textContent = 'Preview';
+          previewing = false;
+        }
+        modal?.classList.add('hidden');
+      }
+    });
+  });
+</script>
