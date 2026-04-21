@@ -1,0 +1,43 @@
+---
+interface Props {
+  rank: number;
+  title: string;
+  excerpt: string;
+  likes: number;
+  author: string;
+  handle: string;
+  avatar: string;
+}
+
+const { rank, title, excerpt, likes, author, handle, avatar } = Astro.props;
+
+const formattedLikes = likes >= 1000 ? `${(likes / 1000).toFixed(1)}k` : likes.toString();
+---
+
+<article class="flex items-start gap-5 py-5 border-b border-slate-700 group hover:bg-[#171c21]/40 px-4 transition-colors duration-200 cursor-pointer">
+  <span class="text-3xl font-extrabold text-slate-700 w-8 flex-shrink-0 text-right leading-tight group-hover:text-[#1d9bf0] transition-colors">
+    {String(rank).padStart(2, '0')}
+  </span>
+
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="text-red-400 text-xs">♥</span>
+      <span class="text-red-400 text-xs font-semibold">{formattedLikes}</span>
+    </div>
+    <h3 class="text-white font-bold text-base mb-1 group-hover:text-[#1d9bf0] transition-colors leading-snug">
+      {title}
+    </h3>
+    <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">
+      {excerpt}
+    </p>
+  </div>
+
+  <div class="flex items-center gap-2 flex-shrink-0">
+    <button class="text-slate-500 hover:text-[#1d9bf0] transition-colors">
+      <span class="material-symbols-outlined text-[20px]">bookmark</span>
+    </button>
+    <button class="text-slate-500 hover:text-[#1d9bf0] transition-colors">
+      <span class="material-symbols-outlined text-[20px]">share</span>
+    </button>
+  </div>
+</article>

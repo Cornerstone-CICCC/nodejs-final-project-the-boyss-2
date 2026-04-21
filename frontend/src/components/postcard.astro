@@ -1,0 +1,88 @@
+---
+interface Props {
+  author: string;
+  handle: string;
+  avatar: string;
+  timestamp: string;
+  title?: string;
+  content: string;
+  likes?: number;
+  replies?: number;
+  reposts?: number;
+  image?: string;
+}
+
+const { author, handle, avatar, timestamp, title, content, likes = 0, replies = 0, reposts = 0, image } = Astro.props;
+---
+
+<article class="border-b border-slate-700 transition-colors duration-200 hover:bg-[#171c21]/50 px-4 py-5">
+  <div class="flex gap-4">
+    <div class="h-10 w-10 flex-shrink-0">
+      <img
+        src={avatar}
+        alt={author}
+        class="h-full w-full rounded-full object-cover border border-slate-700"
+      />
+    </div>
+
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="font-bold text-white hover:underline cursor-pointer">{author}</span>
+        <span class="text-slate-500">{handle}</span>
+        <span class="text-slate-500">·</span>
+        <span class="text-slate-500 text-sm">{timestamp}</span>
+      </div>
+
+      {title && (
+        <h3 class="font-bold text-base text-white mb-2 hover:underline cursor-pointer">
+          {title}
+        </h3>
+      )}
+
+      <p class="text-slate-300 text-sm mb-3 leading-relaxed">
+        {content}
+      </p>
+
+      {image && (
+        <div class="mb-3 rounded-lg overflow-hidden border border-slate-700">
+          <img src={image} alt="Post content" class="w-full object-cover" />
+        </div>
+      )}
+
+      <div class="flex justify-between text-slate-500 text-xs mb-2 max-w-xs">
+        {replies > 0 && (
+          <span class="hover:text-[#1d9bf0] cursor-pointer">{replies} comments</span>
+        )}
+        {reposts > 0 && (
+          <span class="hover:text-[#1d9bf0] cursor-pointer">{reposts} reposts</span>
+        )}
+        {likes > 0 && (
+          <span class="hover:text-red-500 cursor-pointer">{likes} likes</span>
+        )}
+      </div>
+
+      <div class="flex justify-around pt-2 text-slate-500 text-sm max-w-xs">
+        <button class="flex items-center gap-2 group hover:text-[#1d9bf0] transition-colors">
+          <span class="material-symbols-outlined text-base group-hover:bg-[#1d9bf0]/10 rounded-full p-1.5">
+            comment
+          </span>
+        </button>
+        <button class="flex items-center gap-2 group hover:text-green-500 transition-colors">
+          <span class="material-symbols-outlined text-base group-hover:bg-green-500/10 rounded-full p-1.5">
+            repeat
+          </span>
+        </button>
+        <button class="flex items-center gap-2 group hover:text-red-500 transition-colors">
+          <span class="material-symbols-outlined text-base group-hover:bg-red-500/10 rounded-full p-1.5">
+            favorite
+          </span>
+        </button>
+        <button class="flex items-center gap-2 group hover:text-[#1d9bf0] transition-colors">
+          <span class="material-symbols-outlined text-base group-hover:bg-[#1d9bf0]/10 rounded-full p-1.5">
+            share
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>

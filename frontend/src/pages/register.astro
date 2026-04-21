@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Register | DevFeed">
+  <div class="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden">
+    <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-tertiary/5 blur-[150px]"></div>
+  </div>
+
+  <main class="w-full max-w-[480px] mx-auto px-6 py-12 min-h-screen flex flex-col justify-center items-center">
+    <div class="mb-12 text-center">
+      <h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2">DevFeed</h1>
+      <p class="text-on-surface-variant text-sm font-medium tracking-wide uppercase">Developer Community</p>
+    </div>
+
+    <div class="w-full bg-surface-container-low rounded-xl p-8 md:p-10 border border-outline-variant/10 shadow-2xl">
+      <header class="mb-8">
+        <h2 class="text-2xl font-bold text-on-surface tracking-tight">Create your profile</h2>
+        <p class="text-on-surface-variant mt-1 text-sm">Join the stream of curated intelligence.</p>
+      </header>
+
+      <form id="registerForm" class="space-y-6">
+        <div class="space-y-1.5">
+          <label class="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-outline ml-1" for="name">Full Name</label>
+          <div class="relative group">
+            <input name="name" id="name" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3.5 text-on-surface placeholder:text-outline/50 focus:ring-1 focus:ring-primary/50 transition-all duration-200 inner-glow" placeholder="Evelyn Thorne" type="text" required />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-outline ml-1" for="email">Email Address</label>
+          <div class="relative group">
+            <input name="email" id="email" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3.5 text-on-surface placeholder:text-outline/50 focus:ring-1 focus:ring-primary/50 transition-all duration-200 inner-glow" placeholder="curator@kinetic.ai" type="email" required />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-outline ml-1" for="username">Username</label>
+            <input name="username" id="username" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3.5 text-on-surface placeholder:text-outline/50 focus:ring-1 focus:ring-primary/50 transition-all duration-200 inner-glow" placeholder="ethorne" type="text" required />
+          </div>
+          <div class="space-y-1.5">
+            <label class="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-outline ml-1" for="password">Password</label>
+            <input name="password" id="password" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3.5 text-on-surface placeholder:text-outline/50 focus:ring-1 focus:ring-primary/50 transition-all duration-200 inner-glow" placeholder="••••••••" type="password" required />
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 py-2">
+          <div class="flex items-center h-5">
+            <input class="h-4 w-4 rounded border-outline-variant bg-surface-container-highest text-primary-container focus:ring-primary/50 focus:ring-offset-background transition-colors" id="terms" name="terms" type="checkbox" required />
+          </div>
+          <label class="text-[0.8125rem] leading-relaxed text-on-surface-variant" for="terms">
+            I agree to the <a class="text-primary hover:underline decoration-primary/30 transition-all" href="#">Terms of Service</a> and <a class="text-primary hover:underline decoration-primary/30 transition-all" href="#">Privacy Policy</a>.
+          </label>
+        </div>
+
+        <div id="errorMsg" class="text-error text-sm hidden"></div>
+
+        <button class="w-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-bold py-4 rounded-full active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary-container/20" type="submit">
+          Create Account
+        </button>
+      </form>
+
+      <div class="mt-8 pt-6 border-t border-outline-variant/10 text-center">
+        <p class="text-sm text-on-surface-variant">
+          Already have an account?
+          <a class="text-primary font-semibold ml-1 hover:text-white transition-colors" href="/login">Login</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full mt-auto bg-[#0f1419] border-t border-slate-800/20">
+    <div class="flex flex-col md:flex-row justify-between items-center px-8 py-10 w-full gap-4 max-w-screen-2xl mx-auto">
+      <p class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em] text-slate-500">
+        &copy; 2024 DevFeed.
+      </p>
+      <div class="flex gap-6">
+        <a class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em] text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Privacy Policy</a>
+        <a class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em] text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Terms of Service</a>
+        <a class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em] text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Cookie Policy</a>
+        <a class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.05em] text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" href="#">Accessibility</a>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<script>
+  import { requireGuest } from '../lib/auth';
+
+  requireGuest();
+
+  const registerForm = document.getElementById('registerForm') as HTMLFormElement;
+  const errorMsg = document.getElementById('errorMsg') as HTMLDivElement;
+
+  registerForm.addEventListener('submit', async (e: SubmitEvent) => {
+    e.preventDefault();
+    errorMsg.classList.add('hidden');
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      username: formData.get('username') as string,
+      password: formData.get('password') as string
+    };
+
+    try {
+      const res: Response = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+
+      const result: { message?: string } = await res.json();
+
+      if (res.ok) {
+        window.location.href = '/login';
+      } else {
+        errorMsg.textContent = result.message || 'Registration failed';
+        errorMsg.classList.remove('hidden');
+      }
+    } catch {
+      errorMsg.textContent = 'Network error. Please try again.';
+      errorMsg.classList.remove('hidden');
+    }
+  });
+</script>

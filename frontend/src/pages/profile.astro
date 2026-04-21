@@ -1,0 +1,16 @@
+---
+// Redirect /profile to /profile/[current-user] — handled client-side
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Profile | DevFeed">
+  <div class="flex items-center justify-center h-screen bg-[#0f1419]">
+    <p class="text-slate-500">Redirecting...</p>
+  </div>
+</Layout>
+
+<script>
+  import { requireAuth } from '../lib/auth';
+  const user = await requireAuth();
+  window.location.href = `/profile/${user.username}`;
+</script>
